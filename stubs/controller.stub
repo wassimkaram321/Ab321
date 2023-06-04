@@ -4,9 +4,15 @@ namespace {{ namespace }};
 
 use {{ rootNamespace }}Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Traits\ResponseTrait;
 class {{ class }} extends Controller
 {
+    use ResponseTrait;
+
+    public function __construct()
+    {
+        
+    }
     /**
      * Display a listing of the resource.
      *

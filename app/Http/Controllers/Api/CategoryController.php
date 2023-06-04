@@ -109,4 +109,12 @@ class CategoryController extends Controller
         $category = $this->categoryService->changeStatus($categoryRequest);
         return $this->success($category,'Success');
     }
+    public function changeFeatured(CategoryRequest $categoryRequest)
+    {
+        //
+        if($this->categoryService->all()->sum('featured') >= 5)
+            return $this->error_message('Cannot featured more cateogries');
+        $this->categoryService->changeFeatured($categoryRequest);
+        return $this->success([],'Success');
+    }
 }

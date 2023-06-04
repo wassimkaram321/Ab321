@@ -14,4 +14,12 @@ class Feature extends Model
         'name_ar',
         'package_id',
     ];
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
+    }
+    public function vendors()
+    {
+        return $this->belongsToMany(Vendor::class, 'feature_vendor', 'feature_id', 'vendor_id')->withPivot('content');
+    }
 }

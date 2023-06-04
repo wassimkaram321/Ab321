@@ -16,7 +16,7 @@ class CategoryService
 
     public function all()
     {
-        return $this->category->with('subCategories')->get();
+        return $this->category->with('subCategories')->orderBy('featured','desc')->get();
     }
 
     public function find($request)
@@ -26,7 +26,7 @@ class CategoryService
 
     public function create($request)
     {
-       
+
         if ($request->has('image'))
             FileHelper::addFile($request->image);
         if ($request->has('thumbnail'))
@@ -70,5 +70,13 @@ class CategoryService
         $category->image = $image->getClientOriginalName();
         $category->thumbnail = $thumbnail->getClientOriginalName();
         $category->save();
+    }
+    public function changeFeatured($request)
+    {
+        
+        return $this->category->findOrFail($request->id)->update([
+
+            'featured'=>$request->featured,
+        ]);
     }
 }

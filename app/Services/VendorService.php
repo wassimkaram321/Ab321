@@ -17,12 +17,12 @@ class VendorService
 
     public function all()
     {
-        return $this->vendor->with(['category','subCategories'])->get();
+        return $this->vendor->with(['category','subCategories','package','features'])->get();
     }
 
     public function find($request)
     {
-
+        $this->vendor->incrementVisits();
         return $this->vendor->with(['category','subCategories'])->findOrFail($request->id);
     }
 

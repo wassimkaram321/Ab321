@@ -32,10 +32,10 @@ class CategoryRequest extends FormRequest
         ];
         if($this->isMethod('post')){
             $rules = [
-                'name'=>'required',
-                'name_ar'=>'required',
-                'description'=>'required',
-                'description_ar'=>'required',
+                'name'=>'sometimes',
+                'name_ar'=>'sometimes',
+                'description'=>'sometimes',
+                'description_ar'=>'sometimes',
                 "id"=>'sometimes',
                 "is_active"=>'sometimes',
                 'image'=>'nullable|image',

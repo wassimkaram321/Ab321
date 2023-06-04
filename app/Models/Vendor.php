@@ -30,6 +30,8 @@ class Vendor extends Model
         'expire_date',
         'avg_rating',
         'category_id',
+        'package_id',
+        'visits',
     ];
 
     public function banners()
@@ -38,7 +40,7 @@ class Vendor extends Model
     }
     public function category()
     {
-        return $this->hasOne(Category::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function subCategories()
@@ -47,15 +49,16 @@ class Vendor extends Model
     }
     public function features()
     {
-        return $this->hasMany(Feature::class);
+        return $this->belongsToMany(Feature::class, 'feature_vendor')
+            ->withPivot('content');
     }
     public function package()
     {
-        return $this->hasOne(Package::class);
+        return $this->belongsTo(Package::class);
     }
-    public function story()
+    public function stories()
     {
-        return $this->hasOne(Story::class);
+        return $this->hasMany(Story::class);
     }
 
     protected static function booted()
@@ -70,6 +73,12 @@ class Vendor extends Model
         });
         static::deleting(function ($vendor) {
             $vendor->subcategories()->detach();
+            $vendor->features()->detach();
         });
+
+    }
+    public function incrementVisits()
+    {
+        $this->increment('visits');
     }
 }

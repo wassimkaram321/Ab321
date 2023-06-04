@@ -36,6 +36,7 @@ class CreateVendorsTable extends Migration
             $table->float('avg_rating', 2, 1)->nullable();
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('package_id');
+            $table->integer('visits');
             $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories');
         });

@@ -17,6 +17,7 @@ class Category extends Model
         'image',
         'thumbnail',
         'is_active',
+        'featured',
     ];
     public function ads()
     {
