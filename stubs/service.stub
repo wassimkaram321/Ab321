@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\{{Model}};
+
+class {{Model}}Service
+{
+    protected ${{model}};
+
+    public function __construct({{Model}} ${{model}})
+    {
+        $this->{{model}} = ${{model}};
+    }
+
+    public function all($request)
+    {
+        return $this->{{model}}->all();
+    }
+
+    public function find($request)
+    {
+        return $this->{{model}}->findOrFail($request->id);
+    }
+
+    public function create($request)
+    {
+        return $this->{{model}}->create($request->all());
+    }
+
+    public function update($request)
+    {
+        return tap($this->{{model}}->findOrFail($request->id)->update($request->all()));
+    }
+
+    public function delete($request)
+    {
+        $this->{{model}}->findOrFail($request->id)->delete();
+    }
+}
