@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\PackageController;
 use App\Http\Controllers\Api\StoryController;
 use App\Http\Controllers\Api\SubCategoryController;
 use App\Http\Controllers\Api\VendorController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -64,5 +65,10 @@ Route::post('story_add',[StoryController::class,'store']);
 Route::post('story_update',[StoryController::class,'update']);
 Route::post('story_delete',[StoryController::class,'destroy']);
 Route::post('seen_stories',[StoryController::class,'seenStories']);
+
+Route::post('make-review', [ReviewController::class,'makeRealestateReview']);
+Route::post('delete-review', [ReviewController::class,'deleteRealestateReview']);
+Route::get('vendor-reviews', [ReviewController::class,'RealestateReviews']);
+Route::post('review-change-status', [ReviewController::class,'statusChange']);
 
 
