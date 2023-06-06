@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class Vendor extends Model
 {
     use HasFactory,HasReviewRating;
-    public $timestamps = false;
+    public $timestamps = true;
+
     protected $fillable = [
         'name',
         'name_ar',
@@ -75,6 +76,7 @@ class Vendor extends Model
         static::deleting(function ($vendor) {
             $vendor->subcategories()->detach();
             $vendor->features()->detach();
+            $vendor->banners()->delete();
         });
 
     }

@@ -16,12 +16,26 @@ class CategoryService
 
     public function all()
     {
-        return $this->category->with('subCategories')->orderBy('featured','desc')->get();
+        return $this->category
+            ->with([
+                'subCategories',
+                'ads' => function ($query) {
+                    $query->orderByRaw("FIELD(priority, 'high', 'medium', 'low')");
+                }
+            ])
+            ->orderBy('featured', 'desc')
+            ->get();
     }
 
     public function find($request)
     {
-        return $this->category->with('subCategories')->findOrFail($request->id);
+        return $this->category
+            ->with([
+                'subCategories',
+                'ads' => function ($query) {
+                    $query->orderByRaw("FIELD(priority, 'high', 'medium', 'low')");
+                }
+            ])->findOrFail($request->id);
     }
 
     public function create($request)
@@ -32,7 +46,7 @@ class CategoryService
         if ($request->has('thumbnail'))
             FileHelper::addFile($request->thumbnail);
         $category = $this->category->create($request->all());
-        $this->addImage($category,$request->file('image') , $request->file('thumbnail'));
+        $this->addImage($category, $request->file('image'), $request->file('thumbnail'));
         return $category;
     }
 
@@ -44,7 +58,7 @@ class CategoryService
             FileHelper::addFile($request->thumbnail);
         $category = $this->category->findOrFail($request->id);
         $category->update($request->all());
-        $this->addImage($category,$request->file('image') , $request->file('thumbnail'));
+        $this->addImage($category, $request->file('image'), $request->file('thumbnail'));
         return $category;
     }
 
@@ -53,6 +67,7 @@ class CategoryService
         $category = $this->category->findOrFail($request->id);
         $category->subCategories()->delete();
         $category->vendors()->delete();
+        $category->ads()->delete();
         $category->delete();
     }
     public function changeStatus($request)
@@ -65,7 +80,7 @@ class CategoryService
         );
         return $category;
     }
-    public function addImage($category , $image , $thumbnail)
+    public function addImage($category, $image, $thumbnail)
     {
         $category->image = $image->getClientOriginalName();
         $category->thumbnail = $thumbnail->getClientOriginalName();
@@ -73,10 +88,9 @@ class CategoryService
     }
     public function changeFeatured($request)
     {
-        
         return $this->category->findOrFail($request->id)->update([
 
-            'featured'=>$request->featured,
+            'featured' => $request->featured,
         ]);
     }
 }
