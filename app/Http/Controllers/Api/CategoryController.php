@@ -117,4 +117,8 @@ class CategoryController extends Controller
         $this->categoryService->changeFeatured($categoryRequest);
         return $this->success([],'Success');
     }
+    public function test()
+    {
+        return view('admin.category.index');
+    }
 }

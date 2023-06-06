@@ -10,7 +10,7 @@ class {{Model}}Service
 
     public function __construct()
     {
-        $this->{{model}} = new {{Model}};
+        $this->{{model}} = new {{Model}}();
     }
 
     public function all($request)

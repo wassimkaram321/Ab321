@@ -13,11 +13,11 @@
         <hr class="sidebar-divider my-0">
 
         <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
+        {{-- <li class="nav-item active">
             <a class="nav-link" href="{{route('dashboard')}}">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>{{__('Dashboard')}}</span></a>
-        </li>
+        </li> --}}
 
         <!-- Divider -->
         <hr class="sidebar-divider">
@@ -28,7 +28,7 @@
         </div>
 
         <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
+        {{-- <li class="nav-item">
             <a class="nav-link collapsed" href="{{route('categories.index')}}">
                 <i class="fas fa-shopping-cart"></i>
 
@@ -61,7 +61,7 @@
 
                 <span>{{__('Users')}}</span>
             </a>
-        </li>
+        </li> --}}
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                 aria-expanded="true" aria-controls="collapseTwo">
@@ -147,6 +147,6 @@
             <button class="rounded-circle border-0" id="sidebarToggle"></button>
         </div>
 
-    
-      
+
+
     </ul>
