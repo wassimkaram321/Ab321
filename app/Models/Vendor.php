@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use Digikraaft\ReviewRating\Traits\HasReviewRating;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Vendor extends Model
 {
-    use HasFactory;
+    use HasFactory,HasReviewRating;
     public $timestamps = true;
+
     protected $fillable = [
         'name',
         'name_ar',
