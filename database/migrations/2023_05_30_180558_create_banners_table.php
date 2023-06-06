@@ -17,14 +17,16 @@ class CreateBannersTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('description')->nullable();
+            $table->unsignedBigInteger('vendor_id');
             $table->date('start_date');
             $table->date('end_date');
-            $table->integer('priority')->default(1);
+            $table->integer('is_active')->default(0);
+            $table->enum('priority', ['high', 'medium', 'low'])->default('high');
             $table->string('url')->nullable();
             $table->bigInteger('click_counts')->default(0);
             $table->string('image');
-            $table->integer('is_active')->default(0);
             $table->timestamps();
+            $table->foreign('vendor_id')->references('id')->on('vendors');
         });
     }
 
