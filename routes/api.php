@@ -1,4 +1,7 @@
 <?php
+
+use App\Http\Controllers\Api\AdController;
+use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\FeatureController;
 use App\Http\Controllers\Api\PackageController;
@@ -64,5 +67,20 @@ Route::post('story_add',[StoryController::class,'store']);
 Route::post('story_update',[StoryController::class,'update']);
 Route::post('story_delete',[StoryController::class,'destroy']);
 Route::post('seen_stories',[StoryController::class,'seenStories']);
+
+Route::get('categoryAds', [AdController::class,'index']);
+Route::get('categoryAd',  [AdController::class,'show']);
+Route::post('categoryAd-store',    [AdController::class,'store']);
+Route::post('categoryAd-update',   [AdController::class,'update']);
+Route::delete('categoryAd-delete', [AdController::class,'destroy']);
+Route::post('categoryAd-update-status', [AdController::class, 'updateStatus']);
+
+Route::get('banners', [BannerController::class,'index']);
+Route::get('banner',  [BannerController::class,'show']);
+Route::post('banner-store',    [BannerController::class,'store']);
+Route::post('banner-update',   [BannerController::class,'update']);
+Route::delete('banner-delete', [BannerController::class,'destroy']);
+Route::post('banner-update-status', [BannerController::class, 'updateStatus']);
+
 
 
