@@ -16,7 +16,7 @@ class GenerateModelFiles extends Command
         $model = $this->argument('model');
         $this->call('make:request', ['name' => $model.'Request']);
         $this->call('make:resource', ['name' => 'Web/'.$model.'Resource']);
-        $this->call('make:controller', ['name' => 'Api/'.$model.'Controller']);
+        $this->call('make:controller', ['name' => 'Api/'.$model.'Controller', '--model' => $model]);
         $this->call('make:service', ['model' => $model]);
         $this->info('Model files generated successfully.');
     }

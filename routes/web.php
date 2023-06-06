@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SubcategoryController;
@@ -30,3 +30,4 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('dashboard_categories',[CategoryController::class,'test']);
