@@ -36,6 +36,8 @@ class AdRequest extends FormRequest
                 return $this->show();
             case 'updateStatus':
                 return $this->updateStatus();
+            case 'clickIncrement':
+                return $this->clickIncrement();
             default:
                 return [];
         }
@@ -84,6 +86,13 @@ class AdRequest extends FormRequest
         return [
             'id'          => 'required|exists:ads,id',
             'is_active'   => 'required',
+        ];
+    }
+
+    public function clickIncrement()
+    {
+        return [
+            'id' => 'required|exists:ads,id',
         ];
     }
 

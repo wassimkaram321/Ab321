@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MainAdRequest extends FormRequest
+class UserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,7 +21,7 @@ class MainAdRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+       public function rules()
     {
         switch ($this->getFunctionName()) {
             case 'index':
@@ -34,10 +34,12 @@ class MainAdRequest extends FormRequest
                 return $this->show();
             case 'destroy':
                 return $this->show();
-            case 'updateStatus':
-                return $this->updateStatus();
-            case 'clickIncrement':
-                return $this->clickIncrement();
+            case 'addVendorToFavorite':
+                return $this->vendorToFavorite();
+            case 'removeVendorToFavorite':
+                return $this->vendorToFavorite();
+            case 'nerabyVendors':
+                return $this->nerabyVendors();
             default:
                 return [];
         }
@@ -52,49 +54,37 @@ class MainAdRequest extends FormRequest
     public function index()
     {
         # code...
-        return [];
+        return [
+        ];
     }
     public function store()
     {
         # code...
         return [
-            'start_date'  => 'required|date',
-            'end_date'    => 'required|date',
-            'priority'    => 'required',
-            'url'         => 'required',
-            'is_active'   => 'required',
-            'image'       => 'required',
+
         ];
     }
     public function update()
     {
 
         return [
-            'id' => 'required|exists:main_ads,id',
-            'start_date'  => 'required|date',
-            'end_date'    => 'required|date',
-            'priority'    => 'required',
-            'url'         => 'required',
-            'is_active'   => 'required',
-            // 'image'       => 'required',
+
         ];
     }
-
-    public function updateStatus()
+    public function vendorToFavorite()
     {
         return [
-            'id'          => 'required|exists:main_ads,id',
-            'is_active'   => 'required',
+            'vendor_id' => 'required|exists:vendors,id',
         ];
     }
-
-    public function clickIncrement()
+    public function nerabyVendors()
     {
         return [
-            'id' => 'required|exists:ads,id',
+            'latitude'  => 'required',
+            'longitude' => 'required',
+            'unit'      => 'required',
         ];
     }
-
     public function getFunctionName(): string
     {
         $action = $this->route()->getAction();

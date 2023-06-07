@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\ {
     ReelController,
     StoryController,
     SubCategoryController,
+    UserController,
     VendorController,
 };
 
@@ -31,6 +32,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('register', [AuthController::class,'register']);
 Route::post('login', [AuthController::class,'login']);
 
 
@@ -97,29 +99,37 @@ Route::get('categoryAd',  [AdController::class,'show']);
 Route::post('categoryAd-store',    [AdController::class,'store']);
 Route::post('categoryAd-update',   [AdController::class,'update']);
 Route::delete('categoryAd-delete', [AdController::class,'destroy']);
-Route::post('categoryAd-update-status', [AdController::class, 'updateStatus']);
+Route::post('categoryAd-update-status',   [AdController::class, 'updateStatus']);
+Route::post('categoryAd-click-increment', [AdController::class, 'clickIncrement']);
 
 Route::get('banners', [BannerController::class,'index']);
 Route::get('banner',  [BannerController::class,'show']);
 Route::post('banner-store',    [BannerController::class,'store']);
 Route::post('banner-update',   [BannerController::class,'update']);
 Route::delete('banner-delete', [BannerController::class,'destroy']);
-Route::post('banner-update-status', [BannerController::class, 'updateStatus']);
+Route::post('banner-update-status',   [BannerController::class, 'updateStatus']);
+
 
 
 Route::get('reels', [ReelController::class,'index']);
 Route::get('reel',  [ReelController::class,'show']);
 Route::post('reel-store',    [ReelController::class,'store']);
 Route::post('reel-update',   [ReelController::class,'update']);
-Route::post('reel-delete', [ReelController::class,'destroy']);
+Route::post('reel-delete',   [ReelController::class,'destroy']);
 
 Route::get('mainAds', [MainAdController::class,'index']);
 Route::get('mainAd',  [MainAdController::class,'show']);
 Route::post('mainAd-store',    [MainAdController::class,'store']);
 Route::post('mainAd-update',   [MainAdController::class,'update']);
 Route::delete('mainAd-delete', [MainAdController::class,'destroy']);
-Route::post('mainAd-update-status', [MainAdController::class, 'updateStatus']);
+Route::post('mainAd-update-status',   [MainAdController::class, 'updateStatus']);
+Route::post('mainAd-click-increment', [MainAdController::class, 'clickIncrement']);
 
 
 
+Route::post('add-favorite-vendor',    [UserController::class, 'addVendorToFavorite']);
+Route::post('remove-favorite-vendor', [UserController::class, 'removeVendorToFavorite']);
+Route::get('get-favorite-vendors',    [UserController::class, 'getFavoriteVendors']);
+
+Route::post('nearby-vendors', [UserController::class, 'getNearbyVendors']);
 });
