@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use App\Models\OTP;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
@@ -46,6 +47,47 @@ class AuthController extends Controller
     }
     public function register(LoginRequest $request)
     {
-        return User::create($request->all());
+        $request->merge(['password'=>Hash::make($request->password)]);
+        return User::updateOrCreate(['phone' => $request->phone], $request->all());
+    }
+    public function userProfile(LoginRequest $request)
+    {
+        $data = Auth::user();
+        return $this->success($data,'success');
+    }
+    public function generateOTP(LoginRequest $request)
+    {
+        $code = rand(111111, 999999);
+        $otp = OTP::updateOrCreate(
+           ["phone" => $request->phone],
+           ["code" => $code]
+        );
+        $data = ['phone'=>$otp->phone,'code'=>$otp->code];
+        return $this->success($data,'success');
+    }
+    public function verifyOTP(LoginRequest $request)
+    {
+        $otp = OTP::wherecode($request->code)->get()->first();
+        if($otp->code == $request->code){
+            return $this->success([],'success');
+        }
+        else{
+            return $this->error_message('Wrong Code');
+        }
+            
+    }
+    public function resetPassword(LoginRequest $request)
+    {
+        $otp = OTP::wherecode($request->code)->get()->first();
+        if($otp->code == $request->code){
+            $user = User::find($otp->phone)->update([
+                'password' => $request->password,
+            ]);
+            return $this->success([],'success');
+        }
+        else{
+            return $this->error_message('Wrong Code');
+        }
+            
     }
 }
