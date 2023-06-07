@@ -75,7 +75,7 @@ class AdRequest extends FormRequest
             'priority'    => 'required',
             'url'         => 'required',
             'is_active'   => 'required',
-            'image'       => 'required',
+            // 'image'       => 'required',
         ];
     }
 
