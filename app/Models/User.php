@@ -48,4 +48,18 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Story::class, 'story_user');
     }
+
+    // many to many
+    public function favoriteVendors()
+    {
+        return $this->belongsToMany(Vendor::class, 'favorite_vendors', 'user_id', 'vendor_id');
+    }
+    
+    // many to many
+    public function nearbyVendors()
+    {
+        return $this->belongsToMany(Vendor::class, 'nearby_vendors', 'user_id', 'vendor_id')
+        ->withPivot('distance');
+    }
+
 }

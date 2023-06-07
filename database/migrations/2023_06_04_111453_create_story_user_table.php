@@ -8,15 +8,17 @@ class CreateStoryUserTable extends Migration
 {
     public function up()
     {
-        Schema::create('story_user', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('story_id');
-            $table->unsignedBigInteger('user_id');
-            $table->timestamps();
+        if (!Schema::hasTable('story_user')) {
+            Schema::create('story_user', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('story_id');
+                $table->unsignedBigInteger('user_id');
+                $table->timestamps();
 
-            $table->foreign('story_id')->references('id')->on('stories')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-        });
+                $table->foreign('story_id')->references('id')->on('stories')->onDelete('cascade');
+                $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            });
+        }
     }
 
     public function down()

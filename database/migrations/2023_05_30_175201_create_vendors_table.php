@@ -20,7 +20,7 @@ class CreateVendorsTable extends Migration
             $table->text('description')->nullable();
             $table->text('description_ar')->nullable();
             $table->string('image');
-            $table->double('distance')->nullable();
+            // $table->double('distance')->nullable();
             $table->time('open')->nullable();
             $table->time('close')->nullable();
             $table->string('phone')->nullable();
