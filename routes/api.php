@@ -1,15 +1,18 @@
 <?php
 
 use App\Http\Controllers\Api\AdController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\FeatureController;
 use App\Http\Controllers\Api\PackageController;
+use App\Http\Controllers\Api\ReelController;
 use App\Http\Controllers\Api\StoryController;
 use App\Http\Controllers\Api\SubCategoryController;
 use App\Http\Controllers\Api\VendorController;
 use App\Http\Controllers\ReviewController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,10 +25,15 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('login', [AuthController::class,'login']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+
+Route::post('logout', [AuthController::class,'logout']);
+
+Route::post('register', [AuthController::class,'register']);
+
 Route::get('categories',[CategoryController::class,'index']);
 Route::get('category',[CategoryController::class,'find']);
 Route::post('category_add',[CategoryController::class,'store']);
@@ -88,5 +96,10 @@ Route::post('banner-update',   [BannerController::class,'update']);
 Route::delete('banner-delete', [BannerController::class,'destroy']);
 Route::post('banner-update-status', [BannerController::class, 'updateStatus']);
 
+Route::get('reels', [ReelController::class,'index']);
+Route::get('reel',  [ReelController::class,'show']);
+Route::post('reel-store',    [ReelController::class,'store']);
+Route::post('reel-update',   [ReelController::class,'update']);
+Route::post('reel-delete', [ReelController::class,'destroy']);
 
-
+});
