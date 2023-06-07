@@ -62,6 +62,10 @@ class Vendor extends Model
     {
         return $this->hasMany(Story::class);
     }
+    public function reels()
+    {
+        return $this->hasMany(Reel::class);
+    }
 
     // many to many
     public function favoriteUsers()
@@ -90,11 +94,20 @@ class Vendor extends Model
             $vendor->subcategories()->detach();
             $vendor->features()->detach();
             $vendor->banners()->delete();
+            $vendor->reels()->delete();
         });
 
     }
     public function incrementVisits()
     {
         $this->increment('visits');
+    }
+    public function scopeApp($query)
+    {
+        if(request()->is_active == 1)
+            return $query->where('is_active', 1);
+        else
+            return $query;
+
     }
 }

@@ -17,15 +17,17 @@ class VendorService
 
     public function all()
     {
+
         return $this->vendor
             ->with(['category', 'subCategories', 'package', 'features', 'banners'])
-            ->withCount('favoriteUsers')
+            ->withCount('favoriteUsers')->app()
             ->get();
     }
 
     public function find($request)
     {
         // $this->vendor->incrementVisits();
+
         return $this->vendor->with(['category', 'subCategories', 'banners'])->withCount('favoriteUsers')->findOrFail($request->id);
     }
 
