@@ -86,4 +86,10 @@ class MainAdController extends Controller
         $this->mainAdServices->updateStatus($request);
         return $this->success([],'success');
     }
+
+    public function clickIncrement(MainAdRequest $request)
+    {
+        $this->mainAdServices->clickIncrement($request);
+        return $this->success([],'success');
+    }
 }
