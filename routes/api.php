@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ {
     CategoryController,
     FeatureController,
     MainAdController,
+    NotificationController,
     PackageController,
     ReelController,
     StoryController,
@@ -64,35 +65,37 @@ Route::post('subcategory_update',[SubCategoryController::class,'update']);
 Route::post('subcategory_delete',[SubCategoryController::class,'destroy']);
 
 Route::get('vendors',[VendorController::class,'index']);
-Route::get('vendor',[VendorController::class,'show']);
+Route::get('vendor', [VendorController::class,'show']);
 Route::post('vendor_add',[VendorController::class,'store']);
 Route::post('vendor_update',[VendorController::class,'update']);
 Route::post('vendor_delete',[VendorController::class,'destroy']);
 Route::post('vendor_status',[VendorController::class,'changeStatus']);
 Route::get('vendor_by_category',[VendorController::class,'getCategoryVendors']);
+Route::post('nearby-vendors',   [UserController::class, 'getNearbyVendors']);
+
 
 Route::get('packages',[PackageController::class,'index']);
-Route::get('package',[PackageController::class,'show']);
+Route::get('package', [PackageController::class,'show']);
 Route::post('package_add',[PackageController::class,'store']);
 Route::post('package_update',[PackageController::class,'update']);
 Route::post('package_delete',[PackageController::class,'destroy']);
-Route::post('add_vendor_package',[PackageController::class,'addVendorPackage']);
+Route::post('add_vendor_package', [PackageController::class,'addVendorPackage']);
 Route::post('add_vendor_features',[PackageController::class,'addVendorFeatures']);
 
 Route::get('features',[FeatureController::class,'index']);
-Route::get('feature',[FeatureController::class,'show']);
+Route::get('feature', [FeatureController::class,'show']);
 Route::post('feature_add',[FeatureController::class,'store']);
 Route::post('feature_update',[FeatureController::class,'update']);
 Route::post('feature_delete',[FeatureController::class,'destroy']);
 
 Route::get('stories',[StoryController::class,'index']);
-Route::get('story',[StoryController::class,'show']);
-Route::post('story_add',[StoryController::class,'store']);
+Route::get('story',  [StoryController::class,'show']);
+Route::post('story_add',   [StoryController::class,'store']);
 Route::post('story_update',[StoryController::class,'update']);
 Route::post('story_delete',[StoryController::class,'destroy']);
 Route::post('seen_stories',[StoryController::class,'seenStories']);
 
-Route::post('make-review', [ReviewController::class,'makeRealestateReview']);
+Route::post('make-review',   [ReviewController::class,'makeRealestateReview']);
 Route::post('delete-review', [ReviewController::class,'deleteRealestateReview']);
 Route::get('vendor-reviews', [ReviewController::class,'RealestateReviews']);
 Route::post('review-change-status', [ReviewController::class,'statusChange']);
@@ -113,7 +116,6 @@ Route::delete('banner-delete', [BannerController::class,'destroy']);
 Route::post('banner-update-status',   [BannerController::class, 'updateStatus']);
 
 
-
 Route::get('reels', [ReelController::class,'index']);
 Route::get('reel',  [ReelController::class,'show']);
 Route::post('reel-store',    [ReelController::class,'store']);
@@ -129,10 +131,11 @@ Route::post('mainAd-update-status',   [MainAdController::class, 'updateStatus'])
 Route::post('mainAd-click-increment', [MainAdController::class, 'clickIncrement']);
 
 
-
 Route::post('add-favorite-vendor',    [UserController::class, 'addVendorToFavorite']);
 Route::post('remove-favorite-vendor', [UserController::class, 'removeVendorToFavorite']);
 Route::get('get-favorite-vendors',    [UserController::class, 'getFavoriteVendors']);
 
-Route::post('nearby-vendors', [UserController::class, 'getNearbyVendors']);
+
+Route::post('sent-notification', [NotificationController::class, 'sentNotification']);
+
 });
