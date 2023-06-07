@@ -24,6 +24,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'role_id',
     ];
 
     /**
@@ -54,7 +56,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Vendor::class, 'favorite_vendors', 'user_id', 'vendor_id');
     }
-    
+
     // many to many
     public function nearbyVendors()
     {

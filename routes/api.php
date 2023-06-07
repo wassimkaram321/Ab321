@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\Api\ {
     AdController,
+    AuthController,
     BannerController,
     CategoryController,
     FeatureController,
