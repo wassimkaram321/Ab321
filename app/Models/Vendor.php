@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Vendor extends Model
 {
-    use HasFactory,HasReviewRating;
+    use HasFactory, HasReviewRating;
     public $timestamps = true;
 
     protected $fillable = [
@@ -65,6 +65,19 @@ class Vendor extends Model
     public function reels()
     {
         return $this->hasMany(Reel::class);
+    }
+
+    // many to many
+    public function favoriteUsers()
+    {
+        return $this->belongsToMany(User::class, 'favorite_vendors', 'vendor_id' ,'user_id');
+    }
+
+    // many to many
+    public function nearbyUsers()
+    {
+        return $this->belongsToMany(User::class, 'nearby_vendors', 'vendor_id' ,'user_id')
+        ->withPivot('distance');
     }
 
     protected static function booted()

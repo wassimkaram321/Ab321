@@ -17,7 +17,7 @@ class CreateMainAdsTable extends Migration
             $table->id();
             $table->date('start_date');
             $table->date('end_date');
-            $table->integer('priority')->default(1);
+            $table->enum('priority', ['high', 'medium', 'low'])->default('high');
             $table->string('url')->nullable();
             $table->bigInteger('click_counts')->default(0);
             $table->string('image');
