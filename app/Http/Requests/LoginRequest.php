@@ -34,6 +34,10 @@ class LoginRequest extends FormRequest
                 return $this->show();
             case 'destroy':
                 return $this->show();
+            case 'generateOTP':
+                return $this->generateOTP();
+            case 'resetPassword':
+                return $this->resetPassword();
             default:
                 return [];
         }
@@ -52,6 +56,23 @@ class LoginRequest extends FormRequest
             'email' => 'sometimes|exists:users,email',
             'phone' => 'sometimes|exists:users,phone',
             'password' => 'required',
+        ];
+    }
+    public function generateOTP()
+    {
+        # code...
+        return [
+            'phone' => 'unique:otps,phone|exists:users,phone',
+        ];
+    }
+    public function resetPassword()
+    {
+        # code...
+        return [
+            'phone' => 'unique:otps,phone|exists:users,phone',
+            'code' => 'required',
+            'password' => 'required',
+            'confirm_password' => 'required|same:password',
         ];
     }
     public function store()
