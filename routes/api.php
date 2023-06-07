@@ -1,13 +1,17 @@
 <?php
 
-use App\Http\Controllers\Api\AdController;
-use App\Http\Controllers\Api\BannerController;
-use App\Http\Controllers\Api\CategoryController;
-use App\Http\Controllers\Api\FeatureController;
-use App\Http\Controllers\Api\PackageController;
-use App\Http\Controllers\Api\StoryController;
-use App\Http\Controllers\Api\SubCategoryController;
-use App\Http\Controllers\Api\VendorController;
+use App\Http\Controllers\Api\ {
+    AdController,
+    BannerController,
+    CategoryController,
+    FeatureController,
+    MainAdController,
+    PackageController,
+    StoryController,
+    SubCategoryController,
+    VendorController,
+};
+
 use App\Http\Controllers\ReviewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -87,6 +91,13 @@ Route::post('banner-store',    [BannerController::class,'store']);
 Route::post('banner-update',   [BannerController::class,'update']);
 Route::delete('banner-delete', [BannerController::class,'destroy']);
 Route::post('banner-update-status', [BannerController::class, 'updateStatus']);
+
+Route::get('mainAds', [MainAdController::class,'index']);
+Route::get('mainAd',  [MainAdController::class,'show']);
+Route::post('mainAd-store',    [MainAdController::class,'store']);
+Route::post('mainAd-update',   [MainAdController::class,'update']);
+Route::delete('mainAd-delete', [MainAdController::class,'destroy']);
+Route::post('mainAd-update-status', [MainAdController::class, 'updateStatus']);
 
 
 

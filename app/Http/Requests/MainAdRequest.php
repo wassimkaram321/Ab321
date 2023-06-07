@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BannerRequest extends FormRequest
+class MainAdRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -56,9 +56,6 @@ class BannerRequest extends FormRequest
     {
         # code...
         return [
-            'name'        => 'required',
-            'description' => 'required',
-            'vendor_id'   => 'required|exists:vendors,id',
             'start_date'  => 'required|date',
             'end_date'    => 'required|date',
             'priority'    => 'required',
@@ -71,10 +68,7 @@ class BannerRequest extends FormRequest
     {
 
         return [
-            'id'          => 'required|exists:banners,id',
-            'name'        => 'required',
-            'description' => 'required',
-            'vendor_id'   => 'required|exists:vendors,id',
+            'id' => 'required|exists:main_ads,id',
             'start_date'  => 'required|date',
             'end_date'    => 'required|date',
             'priority'    => 'required',
@@ -87,7 +81,7 @@ class BannerRequest extends FormRequest
     public function updateStatus()
     {
         return [
-            'id'          => 'required|exists:banners,id',
+            'id'          => 'required|exists:main_ads,id',
             'is_active'   => 'required',
         ];
     }
