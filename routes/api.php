@@ -32,19 +32,22 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('register', [AuthController::class,'register']);
-Route::post('login', [AuthController::class,'login']);
 
+Route::post('login', [AuthController::class,'login']);
+Route::post('register', [AuthController::class,'register']);
+Route::post('sign-up', [AuthController::class,'generateOTP']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
 Route::post('logout', [AuthController::class,'logout']);
 
-Route::post('register', [AuthController::class,'register']);
-Route::post('sign-up', [AuthController::class,'generateOTP']);
+
+
 Route::post('verify-otp', [AuthController::class,'verifyOTP']);
 Route::post('reset-password', [AuthController::class,'resetPassword']);
 Route::get('profile', [AuthController::class,'userProfile']);
+
+
 
 Route::get('categories',[CategoryController::class,'index']);
 Route::get('category',[CategoryController::class,'find']);
