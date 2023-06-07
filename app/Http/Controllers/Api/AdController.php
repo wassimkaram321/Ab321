@@ -53,4 +53,10 @@ class AdController extends Controller
         $this->adServices->updateStatus($adRequest);
         return $this->success([],'success');
     }
+
+    public function clickIncrement(AdRequest $adRequest)
+    {
+        $this->adServices->clickIncrement($adRequest);
+        return $this->success([],'success');
+    }
 }

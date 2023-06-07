@@ -61,4 +61,10 @@ class MainAdService
         $mainAd->save();
         return $mainAd;
     }
+
+    public function clickIncrement($request)
+    {
+        $mainAd = $this->mainAd->findOrFail($request->id);
+        $mainAd->increment('click_counts');
+    }
 }
