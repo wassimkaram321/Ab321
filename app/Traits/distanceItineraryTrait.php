@@ -1,14 +1,17 @@
 <?php
+
 namespace App\Traits;
+
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+
 trait distanceItineraryTrait
 {
- public function distance($lat1, $lon1, $lat2, $lon2, $unit)
+    public function distance($lat1, $lon1, $lat2, $lon2, $unit = 'K')
     {
         if (($lat1 == $lat2) && ($lon1 == $lon2)) {
-             return 0;
-         }
+            return 0;
+        }
         $theta = $lon1 - $lon2;
         $dist = sin($this->degreeToRadins($lat1)) * sin($this->degreeToRadins($lat2)) +  cos($this->degreeToRadins($lat1)) * cos($this->degreeToRadins($lat2)) * cos($this->degreeToRadins($theta));
         $dist = acos($dist);
@@ -25,7 +28,7 @@ trait distanceItineraryTrait
     }
     public function degreeToRadins($data)
     {
-        $Radians = $data*(M_PI/180);
+        $Radians = $data * (M_PI / 180);
         return $Radians;
     }
 }

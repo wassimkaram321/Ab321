@@ -61,4 +61,10 @@ class AdService
         $ad->save();
         return $ad;
     }
+
+    public function clickincrement($request)
+    {
+        $ad = $this->ad->findOrFail($request->id);
+        $ad->increment('click_counts');
+    }
 }
