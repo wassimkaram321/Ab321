@@ -13,17 +13,19 @@ class CreateReviewsTable extends Migration
      */
     public function up()
     {
-        Schema::create('reviews', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('title')->nullable();
-            $table->text('review');
-            $table->integer('rating')->nullable();
-            $table->morphs('model');
-            $table->morphs('author');
-            $table->integer('status')->default(0);
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        if (!Schema::hasTable('reviews')) {
+            Schema::create('reviews', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('title')->nullable();
+                $table->text('review');
+                $table->integer('rating')->nullable();
+                $table->morphs('model');
+                $table->morphs('author');
+                $table->integer('status')->default(0);
+                $table->timestamps();
+                $table->softDeletes();
+            });
+        }
     }
 
     /**
