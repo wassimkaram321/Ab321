@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('phone')->nullable();
             $table->unsignedBigInteger('role_id')->default(2);
+            $table->boolean('enable_notification ')->default(0)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
