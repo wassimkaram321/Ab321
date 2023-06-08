@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Helpers\FileHelper;
 use App\Models\Reel;
+use App\Models\User;
 
 class ReelService
 {
@@ -16,12 +17,24 @@ class ReelService
 
     public function all($request)
     {
-        return $this->reel->get();
+        $reels = $this->reel->with('vendor:id,name,name_ar,image')->get();
+
+        $user = auth()->user();
+
+        $reelIds = $user->reels->pluck('id')->toArray();
+        foreach ($reels as $reel) {
+            $reel['seen'] = in_array($reel->id, $reelIds) ? 1 : 0;
+            $reel['video'] = asset('images/reels/'.$reel->video);
+        }
+
+        return $reels->sortBy('seen')->values();
     }
+
 
     public function find($request)
     {
-        return $this->reel->findOrFail($request->id);
+        return $this->reel->app($request->id)->findOrFail($request->id);
+
     }
 
     public function create($request)
@@ -49,6 +62,17 @@ class ReelService
 
     public function delete($request)
     {
+
         $this->reel->findOrFail($request->id)->delete();
+    }
+    public function seenReels($request)
+    {
+        $ids = $request->ids;
+        $userId = auth()->user()->id;
+        $user = User::findOrFail($userId);
+
+        foreach($ids as $id){
+            $user->reels()->syncWithoutDetaching($id);
+        }
     }
 }

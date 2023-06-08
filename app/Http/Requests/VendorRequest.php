@@ -48,6 +48,8 @@ class VendorRequest extends FormRequest
                 'category_id'=>'sometimes',
                 "id"=>'sometimes',
                 'is_active'=>'nullable',
+                'custom_date'=>'nullable|date',
+                'website'=>'nullable',
             ];
         }
         return $rules;

@@ -65,7 +65,7 @@ class ReelController extends Controller
      * @param  \App\Models\Reel  $reel
      * @return \Illuminate\Http\Response
      */
-    public function update(ReelRequest $request)
+    public function update(ReelRequest $request,$id)
     {
         //
         $data = $this->reelServices->update($request);
@@ -82,6 +82,13 @@ class ReelController extends Controller
     {
         //
         $this->reelServices->delete($request);
+        return $this->success([],'success');
+
+    }
+    public function seenReels(ReelRequest $request)
+    {
+        //
+        $this->reelServices->seenReels($request);
         return $this->success([],'success');
 
     }

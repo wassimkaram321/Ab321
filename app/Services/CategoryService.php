@@ -9,20 +9,26 @@ class CategoryService
 {
     protected $category;
 
-    public function __construct(Category $category)
+    public function __construct()
     {
-        $this->category = $category;
+        $this->category = new Category();
     }
 
-    public function all()
+    public function all($request)
     {
-        return $this->category
+        return $this->category->app()
             ->with([
                 'subCategories',
                 'ads' => function ($query) {
                     $query->orderByRaw("FIELD(priority, 'high', 'medium', 'low')");
                 }
             ])
+            ->orderBy('featured', 'desc')
+            ->get();
+    }
+    public function allWithOut($request)
+    {
+        return $this->category->app()
             ->orderBy('featured', 'desc')
             ->get();
     }

@@ -19,6 +19,7 @@ class Category extends Model
         'thumbnail',
         'is_active',
         'featured',
+        'color',
     ];
     public function ads()
     {
@@ -33,6 +34,14 @@ class Category extends Model
     public function vendors()
     {
         return $this->belongsToMany(Vendor::class);
+    }
+    public function scopeApp($query)
+    {
+        if(request()->has('featured'))
+            return $query->where('featured', 1);
+        else
+            return $query;
+
     }
 
 }

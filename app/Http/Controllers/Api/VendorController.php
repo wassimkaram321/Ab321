@@ -22,10 +22,16 @@ class VendorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(VendorRequest $request)
     {
         //
-        $data = $this->vendorServices->all();
+        $data = $this->vendorServices->all($request);
+        return $this->success($data,'Success');
+    }
+    public function allVendors(VendorRequest $request)
+    {
+        //
+        $data = $this->vendorServices->allVendors($request);
         return $this->success($data,'Success');
     }
 

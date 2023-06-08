@@ -37,6 +37,8 @@ class CreateVendorsTable extends Migration
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('package_id');
             $table->integer('visits');
+            $table->date('custom_date')->default(null);
+            $table->string('webiste')->default(null);
             $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories');
         });

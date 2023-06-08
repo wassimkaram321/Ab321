@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('phone')->nullable();
             $table->string('device_token')->nullable();
+            $table->string('avatar')->nullable();
             $table->unsignedBigInteger('role_id')->default(2);
             $table->rememberToken();
             $table->timestamps();

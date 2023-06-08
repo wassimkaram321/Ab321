@@ -19,6 +19,7 @@ class CreateFeatureVendorTable extends Migration
             $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade');
             $table->unsignedBigInteger('feature_id');
             $table->string('contnet')->nullable();
+            $table->string('icon')->nullable();
             $table->foreign('feature_id')->references('id')->on('features')->onDelete('cascade');
             $table->timestamps();
         });

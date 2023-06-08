@@ -2,13 +2,16 @@
 
 
 use App\Http\Controllers\Api\ {
+    AboutController,
     AdController,
     AuthController,
     BannerController,
     CategoryController,
     FeatureController,
     MainAdController,
+    MainController,
     PackageController,
+    PrivacyController,
     ReelController,
     StoryController,
     SubCategoryController,
@@ -64,6 +67,7 @@ Route::post('subcategory_update',[SubCategoryController::class,'update']);
 Route::post('subcategory_delete',[SubCategoryController::class,'destroy']);
 
 Route::get('vendors',[VendorController::class,'index']);
+Route::get('all-vendors',[VendorController::class,'allVendors']);
 Route::get('vendor',[VendorController::class,'show']);
 Route::post('vendor_add',[VendorController::class,'store']);
 Route::post('vendor_update',[VendorController::class,'update']);
@@ -90,7 +94,7 @@ Route::get('story',[StoryController::class,'show']);
 Route::post('story_add',[StoryController::class,'store']);
 Route::post('story_update',[StoryController::class,'update']);
 Route::post('story_delete',[StoryController::class,'destroy']);
-Route::post('seen_stories',[StoryController::class,'seenStories']);
+Route::post('seen-stories',[StoryController::class,'seenStories']);
 
 Route::post('make-review', [ReviewController::class,'makeRealestateReview']);
 Route::post('delete-review', [ReviewController::class,'deleteRealestateReview']);
@@ -119,6 +123,7 @@ Route::get('reel',  [ReelController::class,'show']);
 Route::post('reel-store',    [ReelController::class,'store']);
 Route::post('reel-update',   [ReelController::class,'update']);
 Route::post('reel-delete',   [ReelController::class,'destroy']);
+Route::post('seen-reels',[ReelController::class,'seenReels']);
 
 Route::get('mainAds', [MainAdController::class,'index']);
 Route::get('mainAd',  [MainAdController::class,'show']);
@@ -133,6 +138,16 @@ Route::post('mainAd-click-increment', [MainAdController::class, 'clickIncrement'
 Route::post('add-favorite-vendor',    [UserController::class, 'addVendorToFavorite']);
 Route::post('remove-favorite-vendor', [UserController::class, 'removeVendorToFavorite']);
 Route::get('get-favorite-vendors',    [UserController::class, 'getFavoriteVendors']);
+Route::get('users',    [UserController::class, 'getAllUsers']);
+
+Route::get('about', [AboutController::class,'show']);
+Route::post('about-update', [AboutController::class,'update']);
+
+Route::get('privacy', [PrivacyController::class,'show']);
+Route::post('privacy-update', [PrivacyController::class,'update']);
 
 Route::post('nearby-vendors', [UserController::class, 'getNearbyVendors']);
+
+Route::get('home', [MainController::class, 'home']);
+
 });

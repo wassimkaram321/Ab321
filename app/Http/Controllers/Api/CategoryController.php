@@ -22,10 +22,10 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $categoryRequest)
     {
         //
-        $categories = $this->categoryService->all();
+        $categories = $this->categoryService->all($categoryRequest);
         return $this->success($categories,'Success');
     }
     public function find(CategoryRequest $categoryRequest)

@@ -20,13 +20,32 @@ class VendorService
 
         return $this->vendor
             ->with(['category', 'subCategories', 'package', 'features', 'banners'])
-            ->withCount('favoriteUsers')->app()
+            ->withCount('favoriteUsers')
+            ->app()
+            ->get();
+    }
+    public function allVendors($request)
+    {
+
+        $features = $request->features ?? [];
+        $subcategories = $request->subcategories ?? [];
+        return $this->vendor
+            ->with(['category', 'subCategories', 'package', 'features', 'banners'])
+            ->withCount('favoriteUsers')
+            ->app()
+            ->where('is_active',$request->is_active)
+            ->orWhere('is_open',$request->is_open)
+            ->orWhereHas('features', function ($query) use ($features) {
+                $query->whereIn('features.id', $features);
+            })
+            ->orWhereHas('subCategories', function ($query) use ($subcategories) {
+                $query->whereIn('subcategories.id', $subcategories);
+            })
             ->get();
     }
 
     public function find($request)
     {
-        // $this->vendor->incrementVisits();
 
         return $this->vendor->with(['category', 'subCategories', 'banners'])->withCount('favoriteUsers')->findOrFail($request->id);
     }
