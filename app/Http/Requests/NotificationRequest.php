@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserRequest extends FormRequest
+class NotificationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -34,14 +34,6 @@ class UserRequest extends FormRequest
                 return $this->show();
             case 'destroy':
                 return $this->show();
-            case 'addVendorToFavorite':
-                return $this->vendorToFavorite();
-            case 'removeVendorToFavorite':
-                return $this->vendorToFavorite();
-            case 'nerabyVendors':
-                return $this->nerabyVendors();
-            case 'changeEnableNotification':
-                return $this->changeEnableNotification();
             default:
                 return [];
         }
@@ -63,7 +55,8 @@ class UserRequest extends FormRequest
     {
         # code...
         return [
-
+            'title' => 'required',
+            'body'  => 'required',
         ];
     }
     public function update()
@@ -71,26 +64,6 @@ class UserRequest extends FormRequest
 
         return [
 
-        ];
-    }
-    public function vendorToFavorite()
-    {
-        return [
-            'vendor_id' => 'required|exists:vendors,id',
-        ];
-    }
-    public function nerabyVendors()
-    {
-        return [
-            'latitude'  => 'required',
-            'longitude' => 'required',
-            'unit'      => 'required',
-        ];
-    }
-    public function changeEnableNotification()
-    {
-        return [
-            'enable_notification' => 'required|boolean',
         ];
     }
     public function getFunctionName(): string

@@ -69,7 +69,7 @@ class UserService
         foreach ($vendors as $vendor) {
             $dist = $this->distance($request->latitude, $request->longitude, $vendor->latitude, $vendor->longitude);
 
-            if($dist <= 5) {
+            if ($dist <= 5) {
                 $vendor->user_distance = $dist;
                 $nearby->push($vendor);
             }
@@ -77,5 +77,13 @@ class UserService
         $nearby = $nearby->sortBy('user_distance')->values();
 
         return $nearby;
+    }
+
+    public function changeEnableNotification($request)
+    {
+        $user = $this->user->findOrFail(Auth::id());
+        $user->enable_notification = $request->enable_notification;
+        $user->save();
+        return $user;
     }
 }
