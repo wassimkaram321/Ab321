@@ -48,9 +48,9 @@ class CategoryService
     {
 
         if ($request->has('image'))
-            FileHelper::addFile($request->image);
+            FileHelper::addFile($request->file('image'),'images/categories');
         if ($request->has('thumbnail'))
-            FileHelper::addFile($request->thumbnail);
+            FileHelper::addFile($request->file('thumbnail'),'images/categories');
         $category = $this->category->create($request->all());
         $this->addImage($category, $request->file('image'), $request->file('thumbnail'));
         return $category;
@@ -59,12 +59,12 @@ class CategoryService
     public function update($request)
     {
         if ($request->has('image'))
-            FileHelper::addFile($request->image);
+            FileHelper::addFile($request->file('image'),'images/categories');
         if ($request->has('thumbnail'))
-            FileHelper::addFile($request->thumbnail);
+            FileHelper::addFile($request->file('thumbnail'),'images/categories');
         $category = $this->category->findOrFail($request->id);
         $category->update($request->all());
-        $this->addImage($category, $request->file('image'), $request->file('thumbnail'));
+        // $this->addImage($category, $request->file('image'), $request->file('thumbnail'));
         return $category;
     }
 
