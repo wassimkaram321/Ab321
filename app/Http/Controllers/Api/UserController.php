@@ -107,9 +107,16 @@ class UserController extends Controller
         $data = $this->userServices->getNearbyVendors($request);
         return $this->success($data,'success');
     }
+
     public function getAllUsers(UserRequest $request)
     {
         $data = $this->userServices->getAllUsers($request);
+
+
+    public function changeEnableNotification(UserRequest $request)
+    {
+        $data = $this->userServices->changeEnableNotification($request);
+
         return $this->success($data,'success');
     }
 }

@@ -100,12 +100,12 @@ class Vendor extends Model
     {
         $this->increment('visits');
     }
+
     public function scopeApp($query)
     {
         if(request()->is_active == 1)
             return $query->where('is_active', 1);
         else
             return $query;
-
     }
 }

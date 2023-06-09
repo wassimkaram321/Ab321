@@ -57,8 +57,17 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Vendor::class, 'favorite_vendors', 'user_id', 'vendor_id');
     }
+
     public function reels()
     {
         return $this->belongsToMany(Reel::class, 'reel_user');
+
+
+    // many to many
+    public function notifications()
+    {
+        return $this->belongsToMany(notification::class, 'user_notification', 'user_id', 'notification_id')
+            ->withPivot(['seen', 'seen_at']);
+
     }
 }
