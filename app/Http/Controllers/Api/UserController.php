@@ -112,7 +112,7 @@ class UserController extends Controller
     {
         $data = $this->userServices->getAllUsers($request);
 
-
+    }
     public function changeEnableNotification(UserRequest $request)
     {
         $data = $this->userServices->changeEnableNotification($request);

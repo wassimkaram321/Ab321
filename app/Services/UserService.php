@@ -83,7 +83,7 @@ class UserService
     {
         return $this->user->all();
 
-
+    }
     public function changeEnableNotification($request)
     {
         $user = $this->user->findOrFail(Auth::id());

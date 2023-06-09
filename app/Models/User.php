@@ -62,6 +62,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Reel::class, 'reel_user');
 
+    }
 
     // many to many
     public function notifications()
