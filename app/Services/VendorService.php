@@ -15,33 +15,46 @@ class VendorService
         $this->vendor = $vendor;
     }
 
-    public function all()
+    public function all($request = null)
     {
 
-        return $this->vendor
-            ->with(['category', 'subCategories', 'package', 'features', 'banners'])
-            ->withCount('favoriteUsers')
-            ->app()
-            ->get();
-    }
-    public function allVendors($request)
-    {
 
-        $features = $request->features ?? [];
-        $subcategories = $request->subcategories ?? [];
-        return $this->vendor
+        $query = $this->vendor
             ->with(['category', 'subCategories', 'package', 'features', 'banners'])
             ->withCount('favoriteUsers')
-            ->app()
-            ->where('is_active',$request->is_active)
-            ->orWhere('is_open',$request->is_open)
-            ->orWhereHas('features', function ($query) use ($features) {
-                $query->whereIn('features.id', $features);
-            })
-            ->orWhereHas('subCategories', function ($query) use ($subcategories) {
-                $query->whereIn('subcategories.id', $subcategories);
-            })
-            ->get();
+            ->app();
+
+        if ($request->all()) {
+            $query->where(function ($query) use ($request) {
+                if ($request->has('is_active')) {
+                    $query->where('is_active', $request->is_active);
+                }
+
+                if ($request->has('is_open')) {
+                    $query->where('is_open', $request->is_open);
+                }
+
+                if ($request->has('subcategories')) {
+                    $subcategories = $request->subcategories;
+                    $query->whereHas('subCategories', function ($query) use ($subcategories) {
+                        $query->whereIn('sub_categories.id', $subcategories);
+                    });
+                }
+
+
+                if ($request->has('features')) {
+                    $features = $request->features;
+                    $query->whereHas('features', function ($query) use ($features) {
+                        $query->whereIn('features.id', $features);
+                    });
+                }
+                // if ($request->has('latitude') && $request->has('longitude')) {
+                
+                // }
+            });
+        }
+
+        return $query->get();
     }
 
     public function find($request)
@@ -53,11 +66,13 @@ class VendorService
     public function create($request)
     {
         $subCategories = $request->subcategories ?? [];
-        if ($request->has('image'))
-            FileHelper::addFile($request->image);
         $vendor = $this->vendor->create($request->all());
         $vendor->subcategories()->attach($subCategories);
-        $this->addImage($vendor, $request->file('image'));
+        if ($request->has('image')) {
+            $file_name = FileHelper::addFile($request->image);
+            $vendor->image = $file_name;
+            $vendor->save();
+        }
         return $vendor;
     }
 
@@ -65,14 +80,15 @@ class VendorService
     {
 
         $subCategories = $request->subcategories ?? [];
-        if ($request->has('image'))
-            FileHelper::addFile($request->image);
         $vendor = $this->vendor->findOrFail($request->id);
-
+        if ($request->has('image')) {
+            $file_name = FileHelper::addFile($request->image);
+            $vendor->image = $file_name;
+            $vendor->save();
+        }
         $vendor->subcategories()->detach();
         $vendor->subcategories()->attach($subCategories);
         $vendor->update($request->all());
-        $this->addImage($vendor, $request->file('image'));
         return $vendor;
     }
 

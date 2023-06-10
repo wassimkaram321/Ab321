@@ -43,5 +43,13 @@ class Category extends Model
             return $query;
 
     }
+    public static function booted()
+    {
+
+        static::retrieved(function ($category) {
+            $category->image = asset('images/categories/'.$category->image);
+            $category->thumbnail = asset('images/categories/'.$category->thumbnail);
+        });
+    }
 
 }

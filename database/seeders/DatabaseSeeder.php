@@ -19,13 +19,13 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // Create roles
-        $adminRole = Role::create(['name' => 'Admin']);
-        $userRole = Role::create(['name' => 'User']);
+        $adminRole = Role::create(['name' => 'Admin','guard_name'=>'web']);
+        $userRole = Role::create(['name' => 'User','guard_name'=>'web']);
 
         // Create an admin user and assign the admin role
         $adminUser = User::create([
             'name' => 'Admin User',
-            'email' => 'admin@gmail.com',
+            'email' => 'admin@peaklink.com',
             'password' => Hash::make('1234567890')
         ]);
         $adminUser->assignRole('Admin');

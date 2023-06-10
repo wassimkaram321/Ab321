@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('device_token')->nullable();
             $table->string('avatar')->nullable();
             $table->unsignedBigInteger('role_id')->default(2);
-            $table->boolean('enable_notification ')->default(0)->nullable();
+            $table->boolean('enable_notification')->default(0)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

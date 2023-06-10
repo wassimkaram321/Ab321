@@ -28,12 +28,7 @@ class VendorController extends Controller
         $data = $this->vendorServices->all($request);
         return $this->success($data,'Success');
     }
-    public function allVendors(VendorRequest $request)
-    {
-        //
-        $data = $this->vendorServices->allVendors($request);
-        return $this->success($data,'Success');
-    }
+    
 
     /**
      * Show the form for creating a new resource.

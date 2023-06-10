@@ -25,4 +25,10 @@ class Banner extends Model
     {
         return $this->belongsTo(Vendor::class);
     }
+    public static function booted()
+    {
+        static::retrieved(function ($banner) {
+            $banner->image = asset('images/banners' . $banner->image);
+        });
+    }
 }

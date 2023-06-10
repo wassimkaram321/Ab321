@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
+use App\Jobs\SaveFile;
 use App\Models\Category;
 use App\Services\CategoryService;
 use App\Traits\ResponseTrait;

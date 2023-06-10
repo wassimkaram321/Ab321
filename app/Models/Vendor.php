@@ -53,8 +53,7 @@ class Vendor extends Model
     }
     public function features()
     {
-        return $this->belongsToMany(Feature::class, 'feature_vendor')
-            ->withPivot('content');
+        return $this->belongsToMany(Feature::class, 'feature_vendor');
     }
     public function package()
     {
@@ -93,6 +92,9 @@ class Vendor extends Model
             $vendor->features()->detach();
             $vendor->banners()->delete();
             $vendor->reels()->delete();
+        });
+        static::retrieved(function ($vendor) {
+            $vendor->image = asset('images/vendors/' . $vendor->image);
         });
 
     }
