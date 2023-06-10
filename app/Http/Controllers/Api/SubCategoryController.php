@@ -22,10 +22,10 @@ class SubCategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(SubCategoryRequest $subCategoryRequest)
     {
         //
-        $data = $this->subCategoryServices->all();
+        $data = $this->subCategoryServices->all($subCategoryRequest);
         return $this->success($data,'Success');
     }
     public function find(SubCategoryRequest $subCategoryRequest)

@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\SubCategory;
 use App\Helpers\FileHelper;
+use App\Models\Category;
+
 class SubCategoryService
 {
     protected $subCategory;
@@ -13,8 +15,14 @@ class SubCategoryService
         $this->subCategory = $subCategory;
     }
 
-    public function all()
+    public function all($request = null)
     {
+        if($request){
+            if($request->has('category_id')){
+                $category = Category::findOrFail($request->category_id);
+                return $category->subCategories;
+            }
+        }
         return $this->subCategory->with('category')->get();
     }
 
