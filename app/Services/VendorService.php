@@ -49,7 +49,7 @@ class VendorService
                     });
                 }
                 // if ($request->has('latitude') && $request->has('longitude')) {
-                
+
                 // }
             });
         }
@@ -111,5 +111,40 @@ class VendorService
     {
         $category = Category::findOrFail($request->category_id);
         return $category->vendors;
+    }
+    public function search($request)
+    {
+        $keyword = $request->input('keyword');
+
+        $vendors = Vendor::with(['category','subCategories','features'])->where('name', 'like', "%$keyword%")
+            ->orWhere('name_ar', 'like', "%$keyword%")
+            ->orWhere('description', 'like', "%$keyword%")
+            ->orWhere('description_ar', 'like', "%$keyword%")
+            ->get();
+
+
+        $categoryVendors = Vendor::with(['category','subCategories','features'])->whereHas('category', function ($query) use ($keyword) {
+            $query->where('name', 'like', "%$keyword%");
+            $query->orWhere('name_ar', 'like', "%$keyword%");
+        })->get();
+
+
+        $subcategoryVendors = Vendor::with(['category','subCategories','features'])->whereHas('subCategories', function ($query) use ($keyword) {
+            $query->where('name', 'like', "%$keyword%");
+            $query->orWhere('name_ar', 'like', "%$keyword%");
+
+        })->get();
+
+        $featureVendors = Vendor::with(['category','subCategories','features'])->whereHas('features', function ($query) use ($keyword) {
+            $query->where('name', 'like', "%$keyword%");
+            $query->orWhere('name_ar', 'like', "%$keyword%");
+
+        })->get();
+        $results = $vendors->merge($categoryVendors)
+            ->merge($subcategoryVendors)
+            ->merge($featureVendors)
+            ->unique('id')
+            ->values();
+        return $results;
     }
 }

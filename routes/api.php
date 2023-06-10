@@ -75,6 +75,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('vendor_delete', [VendorController::class, 'destroy']);
     Route::post('vendor_status', [VendorController::class, 'changeStatus']);
     Route::get('vendor_by_category', [VendorController::class, 'getCategoryVendors']);
+    Route::get('search', [VendorController::class, 'search']);
     Route::post('nearby-vendors',   [UserController::class, 'getNearbyVendors']);
 
 
@@ -138,10 +139,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('add-favorite-vendor',    [UserController::class, 'addVendorToFavorite']);
     Route::post('remove-favorite-vendor', [UserController::class, 'removeVendorToFavorite']);
     Route::get('get-favorite-vendors',    [UserController::class, 'getFavoriteVendors']);
-  
+
     Route::get('users',    [UserController::class, 'getAllUsers']);
-  
-  
+
+
     Route::get('about', [AboutController::class,'show']);
     Route::post('about-update', [AboutController::class,'update']);
 

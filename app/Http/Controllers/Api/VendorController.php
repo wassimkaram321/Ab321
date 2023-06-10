@@ -28,7 +28,7 @@ class VendorController extends Controller
         $data = $this->vendorServices->all($request);
         return $this->success($data,'Success');
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -114,5 +114,11 @@ class VendorController extends Controller
         //
         $this->vendorServices->getCategoryVendors($request);
         return $this->success([],'Success');
+    }
+    public function search(VendorRequest $request)
+    {
+        //
+        $data = $this->vendorServices->search($request);
+        return $this->success($data,'Success');
     }
 }
