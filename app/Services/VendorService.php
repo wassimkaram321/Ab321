@@ -40,6 +40,12 @@ class VendorService
                         $query->whereIn('sub_categories.id', $subcategories);
                     });
                 }
+                if ($request->has('category')) {
+                    $category = $request->category;
+                    $query->whereHas('category', function ($query) use ($category) {
+                        $query->wherecategory_id('categories.id', $category);
+                    });
+                }
 
 
                 if ($request->has('features')) {
