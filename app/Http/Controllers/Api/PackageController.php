@@ -20,36 +20,36 @@ class PackageController extends Controller
     public function index(PackageRequest $packageRequest)
     {
         $data = $this->packageServices->all($packageRequest);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
     public function show(PackageRequest $packageRequest)
     {
         $data = $this->packageServices->find($packageRequest);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
     public function store(PackageRequest $packageRequest)
     {
         $data = $this->packageServices->create($packageRequest);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
     public function update(PackageRequest $packageRequest)
     {
         $this->packageServices->update($packageRequest);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
     public function destroy(PackageRequest $packageRequest)
     {
         $this->packageServices->delete($packageRequest);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
     public function addVendorPackage(PackageRequest $packageRequest)
     {
         $data = $this->packageServices->addVendorPackage($packageRequest);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
     public function addVendorFeatures(PackageRequest $packageRequest)
     {
         $data = $this->packageServices->addVendorFeatures($packageRequest);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 }

@@ -7,6 +7,7 @@ use App\Services\ReviewControllerService;
 use App\Services\ReviewService;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
+
 class ReviewController extends Controller
 {
     //
@@ -20,25 +21,23 @@ class ReviewController extends Controller
     {
         # code...
         $data = $this->reviewServices->vendorReviews($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
     public function makeRealestateReview(ReviewRequest $request)
     {
         # code...
         $this->reviewServices->makeReview($request);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
     public function deleteRealestateReview(ReviewRequest $request)
     {
         # code...
         $this->reviewServices->deleteReview($request);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
     public function statusChange(ReviewRequest $request)
     {
         $this->reviewServices->statusChange($request);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
-
-
 }

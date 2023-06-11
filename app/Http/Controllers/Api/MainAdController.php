@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\MainAd;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;;
+
 use App\Traits\ResponseTrait;
 use App\Services\MainAdService;
 use App\Http\Requests\MainAdRequest;
@@ -25,7 +26,7 @@ class MainAdController extends Controller
     public function index(MainAdRequest $request)
     {
         $data = $this->mainAdServices->all($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
 
@@ -38,7 +39,7 @@ class MainAdController extends Controller
     public function store(MainAdRequest $request)
     {
         $data = $this->mainAdServices->create($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -51,7 +52,7 @@ class MainAdController extends Controller
     {
         //
         $data = $this->mainAdServices->find($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
 
@@ -66,7 +67,7 @@ class MainAdController extends Controller
     {
         //
         $data = $this->mainAdServices->update($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -78,18 +79,18 @@ class MainAdController extends Controller
     public function destroy(MainAdRequest $request)
     {
         $this->mainAdServices->delete($request);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
 
     public function updateStatus(MainAdRequest $request)
     {
         $this->mainAdServices->updateStatus($request);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
 
     public function clickIncrement(MainAdRequest $request)
     {
         $this->mainAdServices->clickIncrement($request);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
 }

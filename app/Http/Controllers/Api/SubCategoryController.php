@@ -26,13 +26,13 @@ class SubCategoryController extends Controller
     {
         //
         $data = $this->subCategoryServices->all($subCategoryRequest);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
     public function find(SubCategoryRequest $subCategoryRequest)
     {
         //
         $data = $this->subCategoryServices->find($subCategoryRequest);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -56,7 +56,7 @@ class SubCategoryController extends Controller
     {
         //
         $data = $this->subCategoryServices->create($subCategoryRequest);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -88,7 +88,7 @@ class SubCategoryController extends Controller
     {
         //
         $data = $this->subCategoryServices->update($subCategoryRequest);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -101,6 +101,6 @@ class SubCategoryController extends Controller
     {
         //
         $this->subCategoryServices->delete($subCategoryRequest);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
 }

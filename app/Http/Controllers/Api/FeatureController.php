@@ -21,26 +21,26 @@ class FeatureController extends Controller
     public function index(FeatureRequest $featureRequest)
     {
         $data = $this->featureServices->all($featureRequest);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
     public function show(FeatureRequest $featureRequest)
     {
         $data = $this->featureServices->find($featureRequest);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
     public function store(FeatureRequest $featureRequest)
     {
         $data = $this->featureServices->create($featureRequest);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
     public function update(FeatureRequest $featureRequest)
     {
         $this->featureServices->update($featureRequest);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
     public function destroy(FeatureRequest $featureRequest)
     {
         $this->featureServices->delete($featureRequest);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
 }

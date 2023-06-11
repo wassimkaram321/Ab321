@@ -27,13 +27,13 @@ class CategoryController extends Controller
     {
         //
         $categories = $this->categoryService->all($categoryRequest);
-        return $this->success($categories,'success');
+        return $this->success($categories, 'success');
     }
     public function find(CategoryRequest $categoryRequest)
     {
         //
         $category = $this->categoryService->find($categoryRequest);
-        return $this->success($category,'success');
+        return $this->success($category, 'success');
     }
 
     /**
@@ -57,7 +57,7 @@ class CategoryController extends Controller
     {
         //
         $category = $this->categoryService->create($categoryRequest);
-        return $this->success($category,'success');
+        return $this->success($category, 'success');
     }
 
     /**
@@ -89,7 +89,7 @@ class CategoryController extends Controller
     {
         //
         $category = $this->categoryService->update($categoryRequest);
-        return $this->success($category,'success');
+        return $this->success($category, 'success');
     }
 
     /**
@@ -102,21 +102,21 @@ class CategoryController extends Controller
     {
         //
         $this->categoryService->delete($categoryRequest);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
     public function changeStatus(CategoryRequest $categoryRequest)
     {
         //
         $category = $this->categoryService->changeStatus($categoryRequest);
-        return $this->success($category,'success');
+        return $this->success($category, 'success');
     }
     public function changeFeatured(CategoryRequest $categoryRequest)
     {
         //
-        if($this->categoryService->all($categoryRequest)->sum('featured') >= 5)
+        if ($this->categoryService->all($categoryRequest)->sum('featured') >= 5)
             return $this->error_message('Cannot featured more cateogries');
         $this->categoryService->changeFeatured($categoryRequest);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
     public function test()
     {

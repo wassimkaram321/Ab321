@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\About;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;;
+
 use App\Traits\ResponseTrait;
 use App\Services\AboutService;
 use App\Http\Requests\AboutRequest;
@@ -26,7 +27,7 @@ class AboutController extends Controller
     {
         //
         $data = $this->aboutServices->all($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
 
@@ -40,7 +41,7 @@ class AboutController extends Controller
     {
         //
         $data = $this->aboutServices->create($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -53,7 +54,7 @@ class AboutController extends Controller
     {
         //
         $data = $this->aboutServices->find($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
 
@@ -69,7 +70,7 @@ class AboutController extends Controller
     {
         //
         $data = $this->aboutServices->update($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -82,7 +83,6 @@ class AboutController extends Controller
     {
         //
         $this->aboutServices->delete($request);
-        return $this->success([],'success');
-
+        return $this->success([], 'success');
     }
 }

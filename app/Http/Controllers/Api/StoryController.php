@@ -20,31 +20,31 @@ class StoryController extends Controller
     public function index(StoryRequest $storyRequest)
     {
         $data = $this->storyServices->all($storyRequest);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
     public function show(StoryRequest $storyRequest)
     {
         $data = $this->storyServices->find($storyRequest);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
     public function store(StoryRequest $storyRequest)
     {
         $data = $this->storyServices->create($storyRequest);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
     public function update(StoryRequest $storyRequest)
     {
         $this->storyServices->update($storyRequest);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
     public function destroy(StoryRequest $storyRequest)
     {
         $this->storyServices->delete($storyRequest);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
     public function seenStories(StoryRequest $storyRequest)
     {
         $this->storyServices->seenStories($storyRequest);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
 }

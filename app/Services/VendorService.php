@@ -4,7 +4,10 @@ namespace App\Services;
 
 use App\Helpers\FileHelper;
 use App\Models\Category;
+use App\Models\Day;
+use App\Models\SubCategory;
 use App\Models\Vendor;
+use Carbon\Carbon;
 
 class VendorService
 {
@@ -18,23 +21,20 @@ class VendorService
     public function all($request = null)
     {
         $query = $this->vendor
-            ->with(['category', 'subCategories', 'package', 'features', 'banners'])
-            ->withCount('favoriteUsers')
-            ->app();
+            ->with(['category'])
+            ->withCount('favoriteUsers')->app();
 
         if ($request->all()) {
             $query = $this->applyQueryFilters($query, $request);
         }
 
-        return $query->get();
+        return $query;
     }
 
     public function find($request)
     {
-        return $this->vendor
-            ->with(['category', 'subCategories', 'banners'])
-            ->withCount('favoriteUsers')
-            ->findOrFail($request->id);
+
+        return $this->vendor->with(['days', 'category', 'subCategories', 'socialMedia', 'features', 'banners'])->withCount('favoriteUsers')->app()->where('id', $request->id);
     }
 
     public function create($request)
@@ -42,12 +42,23 @@ class VendorService
         $subCategories = $request->subcategories ?? [];
         $vendor = $this->vendor->create($request->all());
         $vendor->subcategories()->attach($subCategories);
-        if ($request->has('image')) {
-            $file_name = FileHelper::addFile($request->image);
-            $vendor->image = $file_name;
-            $vendor->save();
+        if (isset($request->days)) {
+            foreach ($request->days as $day) {
+                $vendor->days()->attach([$day['day_id'] => ['open_at' => $day['open_at'], 'close_at' => $day['close_at']]]);
+            }
         }
-        return $vendor;
+        if (isset($request->social_media)) {
+            foreach ($request->social_media as $social_media) {
+                $vendor->socialMedia()->attach([$social_media['id'] => ['link' => $social_media['link']]]);
+            }
+
+            if ($request->has('image')) {
+                $file_name = FileHelper::addFile($request->image);
+                $vendor->image = $file_name;
+                $vendor->save();
+            }
+            return $vendor;
+        }
     }
 
     public function update($request)
@@ -62,6 +73,40 @@ class VendorService
         $vendor->subcategories()->detach();
         $vendor->subcategories()->attach($subCategories);
         $vendor->update($request->all());
+        if (isset($request->days)) {
+            foreach ($request->days as $day) {
+                if ($vendor->days()->where('days.id', $day['day_id'])->exists()) {
+                    $vendor->days()->updateExistingPivot($day['day_id'], ['open_at' => $day['open_at'], 'close_at' => $day['close_at']]);
+                } else {
+                    $vendor->days()->attach([$day['day_id'] => ['open_at' => $day['open_at'], 'close_at' => $day['close_at']]]);
+                }
+            }
+            // Remove days that are not included in the days array
+            $existingDays = $vendor->days()->pluck('days.id')->toArray();
+            $daysToRemove = array_diff($existingDays, array_column($request->days, 'day_id'));
+
+            if (!empty($daysToRemove)) {
+                $vendor->days()->detach($daysToRemove);
+            }
+        }
+
+        if (isset($request->social_media)) {
+            foreach ($request->social_media as $social_media) {
+                if ($vendor->socialMedia()->where('social_media.id', $social_media['id'])->exists()) {
+                    $vendor->socialMedia()->updateExistingPivot($social_media['id'], ['link' => $social_media['link']]);
+                } else {
+                    $vendor->socialMedia()->attach([$social_media['id'] => ['link' => $social_media['link']]]);
+                }
+            }
+            // Remove midea that are not included in the days array
+            $existingMedia = $vendor->socialMedia()->pluck('social_media.id')->toArray();
+            $MediaToRemove = array_diff($existingMedia, array_column($request->social_media, 'id'));
+
+            if (!empty($MediaToRemove)) {
+                $vendor->socialMedia()->detach($MediaToRemove);
+            }
+        }
+
         return $vendor;
     }
 
@@ -201,5 +246,21 @@ class VendorService
             }
         });
         return $query;
+    }
+
+    public function recomendation($request)
+    {
+        $vendor = $this->vendor->with(['subCategories'])->findOrFail($request->id);
+        $subcategories = $vendor->subcategories;
+        $vendors = Vendor::where('id', '!=', $request->id)->whereIn('id', function ($query) use ($subcategories) {
+            $query->select('vendor_id')
+                ->from('sub_category_vendor')
+                ->whereIn('sub_category_id', $subcategories->pluck('id'));
+        })
+        ->orderByDesc('visits')
+        ->take(5);
+
+        return $vendors;
+
     }
 }
