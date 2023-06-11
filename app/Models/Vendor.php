@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Digikraaft\ReviewRating\Traits\HasReviewRating;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Vendor extends Model
 {
@@ -113,7 +114,6 @@ class Vendor extends Model
         static::retrieved(function ($vendor) {
             $vendor->image = asset('images/vendors/' . $vendor->image);
         });
-
     }
     public function incrementVisits()
     {
@@ -131,15 +131,21 @@ class Vendor extends Model
         $currentDay = Carbon::now()->format('l');
         $currentTime = Carbon::now()->format('H:i:s');
         $day = Day::where('name', $currentDay)->first();
+        $user = User::where('id', Auth::id())->first();
 
         foreach ($newQuery as $vendor) {
             $qDay = $vendor->days()->where('day_id', $day->id)->first();
+            $fav  = $user->favoriteVendors()->where('vendor_id', $vendor->id)->first();
 
             $vendor->open_status = 0;
+            $vendor->favorite_status = 0;
             if (isset($qDay)) {
                 if ($qDay->pivot->open_at < $currentTime && $qDay->pivot->close_at > $currentTime) {
                     $vendor->open_status = 1;
                 }
+            }
+            if (isset($fav)) {
+                $vendor->favorite_status = 1;
             }
         }
         return $newQuery;

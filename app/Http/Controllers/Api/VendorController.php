@@ -26,7 +26,7 @@ class VendorController extends Controller
     {
         //
         $data = $this->vendorServices->all($request);
-        return $this->success($data,'Success');
+        return $this->success($data, 'success');
     }
 
 
@@ -50,7 +50,7 @@ class VendorController extends Controller
     {
         //
         $data = $this->vendorServices->create($request);
-        return $this->success($data,'Success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -61,9 +61,11 @@ class VendorController extends Controller
      */
     public function show(VendorRequest $request)
     {
-        //
         $data = $this->vendorServices->find($request);
-        return $this->success($data,'Success');
+        if ($request->recomindation == 1) {
+            $data['recomindation'] = $this->vendorServices->recomendation($request);
+        }
+        return $this->success($data, 'success');
     }
 
     /**
@@ -88,7 +90,7 @@ class VendorController extends Controller
     {
         //
         $data = $this->vendorServices->update($request);
-        return $this->success($data,'Success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -101,24 +103,24 @@ class VendorController extends Controller
     {
         //
         $this->vendorServices->delete($request);
-        return $this->success([],'Success');
+        return $this->success([], 'success');
     }
     public function changeStatus(VendorRequest $request)
     {
         //
         $this->vendorServices->changeStatus($request);
-        return $this->success([],'Success');
+        return $this->success([], 'success');
     }
     public function getCategoryVendors(VendorRequest $request)
     {
         //
         $this->vendorServices->getCategoryVendors($request);
-        return $this->success([],'Success');
+        return $this->success([], 'success');
     }
     public function search(VendorRequest $request)
     {
         //
         $data = $this->vendorServices->search($request);
-        return $this->success($data,'Success');
+        return $this->success($data, 'success');
     }
 }
