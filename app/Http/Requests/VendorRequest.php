@@ -24,32 +24,38 @@ class VendorRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            "id"=>'sometimes',
+            "id" => 'sometimes',
         ];
-        if($this->isMethod('post')){
+        if ($this->isMethod('post')) {
             $rules = [
-                'name'=>'sometimes',
-                'name_ar'=>'sometimes',
-                'description'=>'sometimes',
-                'description_ar'=>'sometimes',
-                'image'=>'sometimes|image',
-                'distance'=>'nullable',
-                'open'=>'nullable',
-                'close'=>'nullable',
-                'phone'=>'nullable',
-                'email'=>'nullable',
-                'address'=>'nullable',
-                'address2'=>'nullable',
-                'latitude'=>'nullable',
-                'longitude'=>'nullable',
-                'is_open'=>'nullable',
-                'start_date'=>'sometimes',
-                'expire_date'=>'sometimes',
-                'category_id'=>'sometimes',
-                "id"=>'sometimes',
-                'is_active'=>'nullable',
-                'custom_date'=>'nullable|date',
-                'website'=>'nullable',
+                'name'            => 'sometimes',
+                'name_ar'         => 'sometimes',
+                'description'     => 'sometimes',
+                'description_ar'  => 'sometimes',
+                'image'           => 'sometimes|image',
+                'distance'        => 'nullable',
+                'phone'           => 'nullable',
+                'email'           => 'nullable',
+                'address'         => 'nullable',
+                'address2'        => 'nullable',
+                'latitude'        => 'nullable',
+                'longitude'       => 'nullable',
+                'is_open'         => 'nullable',
+                'start_date'      => 'sometimes',
+                'expire_date'     => 'sometimes',
+                'category_id'     => 'sometimes',
+                "id"              => 'sometimes',
+                'is_active'       => 'nullable',
+                'custom_date'     => 'nullable|date',
+                'website'         => 'nullable',
+                'days'            => 'required|array',
+                'days.*.day_id'   => 'required|exists:days,id',
+                'days.*.open_at'  => 'required',
+                'days.*.close_at' => 'required|after:days.*.open_at',
+                'social_media'    => 'array',
+                'social_media_.*.id'   => 'exists:social_media,id',
+                'social_media_.*.link' => 'nullable',
+
             ];
         }
         return $rules;

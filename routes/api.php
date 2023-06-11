@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\{
     PackageController,
     PrivacyController,
     ReelController,
+    SocialMediaController,
     StoryController,
     SubCategoryController,
     UserController,
@@ -159,5 +160,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('notification-seeAll',      [NotificationController::class, 'seeAll']);
     Route::get('notification-unseen-count', [NotificationController::class, 'unseenCount']);
     Route::post('notification-enable',      [UserController::class, 'changeEnableNotification']);
+
+
+    Route::get('days', [MainController::class, 'days']);
+
+    Route::get('social-media-all', [SocialMediaController::class, 'index']);
+    Route::get('social-media-get', [SocialMediaController::class, 'show']);
+    Route::post('social-media-store',    [SocialMediaController::class, 'store']);
+    Route::post('social-media-update',   [SocialMediaController::class, 'update']);
+    Route::delete('social-media-delete', [SocialMediaController::class, 'destroy']);
+
 
 });
