@@ -17,14 +17,13 @@ class VendorService
 
     public function all($request = null)
     {
-
         $query = $this->vendor
             ->with(['category', 'subCategories', 'package', 'features', 'banners'])
             ->withCount('favoriteUsers')
             ->app();
 
         if ($request->all()) {
-            $this->applyQueryFilters($query, $request);
+            $query = $this->applyQueryFilters($query, $request);
         }
 
         return $query->get();
@@ -32,8 +31,10 @@ class VendorService
 
     public function find($request)
     {
-
-        return $this->vendor->with(['category', 'subCategories', 'banners'])->withCount('favoriteUsers')->findOrFail($request->id);
+        return $this->vendor
+            ->with(['category', 'subCategories', 'banners'])
+            ->withCount('favoriteUsers')
+            ->findOrFail($request->id);
     }
 
     public function create($request)
@@ -51,7 +52,6 @@ class VendorService
 
     public function update($request)
     {
-
         $subCategories = $request->subcategories ?? [];
         $vendor = $this->vendor->findOrFail($request->id);
         if ($request->has('image')) {
@@ -72,7 +72,7 @@ class VendorService
     public function changeStatus($request)
     {
         $this->vendor->findOrFail($request->id)->update([
-            'is_active' => $request->is_active
+            'is_active' => $request->is_active,
         ]);
     }
     public function addImage($vendor, $image)
@@ -88,37 +88,81 @@ class VendorService
     public function search($request)
     {
         $keyword = $request->input('keyword');
+        if ($request->has('category_id')) {
+            $category_vendors = Vendor::with(['category', 'subCategories', 'features'])
+                ->where('category_id', $request->category_id)
+                ->where(function ($query) use ($keyword) {
+                    $query
+                        ->where('name', 'like', "%$keyword%")
+                        ->orWhere('name_ar', 'like', "%$keyword%")
+                        ->orWhere('description', 'like', "%$keyword%")
+                        ->orWhere('description_ar', 'like', "%$keyword%");
+                })
 
-        $vendors = Vendor::with(['category', 'subCategories', 'features'])->where('name', 'like', "%$keyword%")
-            ->orWhere('name_ar', 'like', "%$keyword%")
-            ->orWhere('description', 'like', "%$keyword%")
-            ->orWhere('description_ar', 'like', "%$keyword%")
-            ->get();
+                ->get();
 
+            return $category_vendors;
+        } elseif ($request->has('subcategory_id')) {
 
-        $categoryVendors = Vendor::with(['category', 'subCategories', 'features'])->whereHas('category', function ($query) use ($keyword) {
-            $query->where('name', 'like', "%$keyword%");
-            $query->orWhere('name_ar', 'like', "%$keyword%");
-        })->get();
+            $subcategory_vendors = Vendor::with(['category', 'subCategories', 'features'])
+                ->whereHas('subCategories', function ($query) use ($keyword,$request) {
+                    $query->where('sub_categories.id', $request->subcategory_id);
+            })
+                ->where(function ($query) use ($keyword) {
+                    $query
+                        ->where('name', 'like', "%$keyword%")
+                        ->orWhere('name_ar', 'like', "%$keyword%")
+                        ->orWhere('description', 'like', "%$keyword%")
+                        ->orWhere('description_ar', 'like', "%$keyword%");
+                })
 
+                ->get();
+            return $subcategory_vendors;
+        } else {
+            $vendors = Vendor::with(['category', 'subCategories', 'features'])
 
-        $subcategoryVendors = Vendor::with(['category', 'subCategories', 'features'])->whereHas('subCategories', function ($query) use ($keyword) {
-            $query->where('name', 'like', "%$keyword%");
-            $query->orWhere('name_ar', 'like', "%$keyword%");
-        })->get();
+                ->where(function ($query) use ($keyword) {
+                    $query
+                        ->where('name', 'like', "%$keyword%")
+                        ->orWhere('name_ar', 'like', "%$keyword%")
+                        ->orWhere('description', 'like', "%$keyword%")
+                        ->orWhere('description_ar', 'like', "%$keyword%");
+                })
 
-        $featureVendors = Vendor::with(['category', 'subCategories', 'features'])->whereHas('features', function ($query) use ($keyword) {
-            $query->where('name', 'like', "%$keyword%");
-            $query->orWhere('name_ar', 'like', "%$keyword%");
-        })->get();
-        $results = $vendors->merge($categoryVendors)
-            ->merge($subcategoryVendors)
-            ->merge($featureVendors)
-            ->unique('id')
-            ->values();
-        return $results;
+                ->get();
+
+            $categoryVendors = Vendor::with(['category', 'subCategories', 'features'])
+                ->whereHas('category', function ($query) use ($keyword) {
+                    $query->where('name', 'like', "%$keyword%")->orWhere('name_ar', 'like', "%$keyword%");
+                })
+
+                ->get();
+
+            $subcategoryVendors = Vendor::with(['category', 'subCategories', 'features'])
+                ->whereHas('subCategories', function ($query) use ($keyword) {
+                    $query->where('name', 'like', "%$keyword%")->orWhere('name_ar', 'like', "%$keyword%");
+                })
+
+                ->get();
+
+            $featureVendors = Vendor::with(['category', 'subCategories', 'features'])
+                ->whereHas('features', function ($query) use ($keyword) {
+                    $query->where('name', 'like', "%$keyword%")->orWhere('name_ar', 'like', "%$keyword%");
+                })
+
+                ->get();
+            $results = $vendors
+                ->merge($categoryVendors)
+                ->merge($subcategoryVendors)
+                ->merge($featureVendors)
+                ->unique('id')
+                ->values();
+
+            return $results;
+        }
     }
-    private function applyQueryFilters($query,$request)
+
+    private function applyQueryFilters($query, $request)
     {
         $query->where(function ($query) use ($request) {
             if ($request->has('is_active')) {
@@ -135,13 +179,9 @@ class VendorService
                     $query->whereIn('sub_categories.id', $subcategories);
                 });
             }
-            if ($request->has('category')) {
-                $category = $request->category;
-                $query->whereHas('category', function ($query) use ($category) {
-                    $query->wherecategory_id('categories.id', $category);
-                });
+            if ($request->has('category_id')) {
+                $query->where('category_id', $request->category_id);
             }
-
 
             if ($request->has('features')) {
                 $features = $request->features;
@@ -150,16 +190,16 @@ class VendorService
                 });
             }
             if ($request->has('rate')) {
-
                 $query->where('avg_rating', $request->rate);
             }
             if ($request->has('latitude') && $request->has('longitude')) {
                 $latitude = $request->latitude;
                 $longitude = $request->longitude;
-                $radius = 10;
+                $radius = 5;
 
-                $query->whereRaw("ST_Distance_Sphere(point(longitude, latitude), point(?, ?)) <= ?", [$longitude, $latitude, $radius * 1000]);
+                $query->whereRaw('ST_Distance_Sphere(point(longitude, latitude), point(?, ?)) <= ?', [$longitude, $latitude, $radius * 1000]);
             }
         });
+        return $query;
     }
 }

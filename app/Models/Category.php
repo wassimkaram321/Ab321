@@ -33,7 +33,7 @@ class Category extends Model
 
     public function vendors()
     {
-        return $this->belongsToMany(Vendor::class);
+        return $this->hasMany(Vendor::class);
     }
     public function scopeApp($query)
     {
