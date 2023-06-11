@@ -156,5 +156,8 @@ class Vendor extends Model
                 $filteredVendors->push($vendor);
         }
         return $filteredVendors;
+
     }
+
+
     }
