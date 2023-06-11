@@ -49,6 +49,7 @@ class AuthController extends Controller
     public function register(LoginRequest $request)
     {
 
+
         $request->merge(['password' => Hash::make($request->password)]);
         $user = User::updateOrCreate(['phone' => $request->phone], $request->all());
         if ($request->has('avatar')) {

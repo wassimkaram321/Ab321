@@ -64,7 +64,7 @@ class UserService
     public function getNearbyVendors($request)
     {
         $user = $this->user->findOrFail(Auth::id());
-        $vendors = Vendor::with('category')->where('is_active', 1)->get();
+        $vendors = Vendor::with('category')->where('is_active', 1)->app();
         $nearby = collect();
         foreach ($vendors as $vendor) {
             $dist = $this->distance($request->latitude, $request->longitude, $vendor->latitude, $vendor->longitude);

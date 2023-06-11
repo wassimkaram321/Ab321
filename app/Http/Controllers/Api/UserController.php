@@ -112,6 +112,7 @@ class UserController extends Controller
     public function getAllUsers(UserRequest $request)
     {
         $data = $this->userServices->getAllUsers($request);
+        return $this->success($data, 'success');
     }
     public function changeEnableNotification(UserRequest $request)
     {

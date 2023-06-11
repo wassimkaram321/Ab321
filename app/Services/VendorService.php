@@ -20,21 +20,25 @@ class VendorService
 
     public function all($request = null)
     {
-        $query = $this->vendor
-            ->with(['category'])
-            ->withCount('favoriteUsers')->app();
+
+        $query = $this->vendor->with(['category'])->withCount('favoriteUsers');
 
         if ($request->all()) {
             $query = $this->applyQueryFilters($query, $request);
+            return $query->app();
+
         }
 
-        return $query;
+        return $query->app();
     }
 
     public function find($request)
     {
-
-        return $this->vendor->with(['days', 'category', 'subCategories', 'socialMedia', 'features', 'banners'])->withCount('favoriteUsers')->app()->where('id', $request->id);
+        return $this->vendor
+            ->with(['days', 'category', 'subCategories', 'socialMedia', 'features', 'banners'])
+            ->withCount('favoriteUsers')
+            ->app()
+            ->where('id', $request->id);
     }
 
     public function create($request)
@@ -75,14 +79,22 @@ class VendorService
         $vendor->update($request->all());
         if (isset($request->days)) {
             foreach ($request->days as $day) {
-                if ($vendor->days()->where('days.id', $day['day_id'])->exists()) {
+                if (
+                    $vendor
+                        ->days()
+                        ->where('days.id', $day['day_id'])
+                        ->exists()
+                ) {
                     $vendor->days()->updateExistingPivot($day['day_id'], ['open_at' => $day['open_at'], 'close_at' => $day['close_at']]);
                 } else {
                     $vendor->days()->attach([$day['day_id'] => ['open_at' => $day['open_at'], 'close_at' => $day['close_at']]]);
                 }
             }
             // Remove days that are not included in the days array
-            $existingDays = $vendor->days()->pluck('days.id')->toArray();
+            $existingDays = $vendor
+                ->days()
+                ->pluck('days.id')
+                ->toArray();
             $daysToRemove = array_diff($existingDays, array_column($request->days, 'day_id'));
 
             if (!empty($daysToRemove)) {
@@ -92,14 +104,22 @@ class VendorService
 
         if (isset($request->social_media)) {
             foreach ($request->social_media as $social_media) {
-                if ($vendor->socialMedia()->where('social_media.id', $social_media['id'])->exists()) {
+                if (
+                    $vendor
+                        ->socialMedia()
+                        ->where('social_media.id', $social_media['id'])
+                        ->exists()
+                ) {
                     $vendor->socialMedia()->updateExistingPivot($social_media['id'], ['link' => $social_media['link']]);
                 } else {
                     $vendor->socialMedia()->attach([$social_media['id'] => ['link' => $social_media['link']]]);
                 }
             }
             // Remove midea that are not included in the days array
-            $existingMedia = $vendor->socialMedia()->pluck('social_media.id')->toArray();
+            $existingMedia = $vendor
+                ->socialMedia()
+                ->pluck('social_media.id')
+                ->toArray();
             $MediaToRemove = array_diff($existingMedia, array_column($request->social_media, 'id'));
 
             if (!empty($MediaToRemove)) {
@@ -144,15 +164,14 @@ class VendorService
                         ->orWhere('description_ar', 'like', "%$keyword%");
                 })
 
-                ->get();
+                ->app();
 
             return $category_vendors;
         } elseif ($request->has('subcategory_id')) {
-
             $subcategory_vendors = Vendor::with(['category', 'subCategories', 'features'])
-                ->whereHas('subCategories', function ($query) use ($keyword,$request) {
+                ->whereHas('subCategories', function ($query) use ($keyword, $request) {
                     $query->where('sub_categories.id', $request->subcategory_id);
-            })
+                })
                 ->where(function ($query) use ($keyword) {
                     $query
                         ->where('name', 'like', "%$keyword%")
@@ -161,7 +180,7 @@ class VendorService
                         ->orWhere('description_ar', 'like', "%$keyword%");
                 })
 
-                ->get();
+                ->app();
             return $subcategory_vendors;
         } else {
             $vendors = Vendor::with(['category', 'subCategories', 'features'])
@@ -174,28 +193,28 @@ class VendorService
                         ->orWhere('description_ar', 'like', "%$keyword%");
                 })
 
-                ->get();
+                ->app();
 
             $categoryVendors = Vendor::with(['category', 'subCategories', 'features'])
                 ->whereHas('category', function ($query) use ($keyword) {
                     $query->where('name', 'like', "%$keyword%")->orWhere('name_ar', 'like', "%$keyword%");
                 })
 
-                ->get();
+                ->app();
 
             $subcategoryVendors = Vendor::with(['category', 'subCategories', 'features'])
                 ->whereHas('subCategories', function ($query) use ($keyword) {
                     $query->where('name', 'like', "%$keyword%")->orWhere('name_ar', 'like', "%$keyword%");
                 })
 
-                ->get();
+                ->app();
 
             $featureVendors = Vendor::with(['category', 'subCategories', 'features'])
                 ->whereHas('features', function ($query) use ($keyword) {
                     $query->where('name', 'like', "%$keyword%")->orWhere('name_ar', 'like', "%$keyword%");
                 })
 
-                ->get();
+                ->app();
             $results = $vendors
                 ->merge($categoryVendors)
                 ->merge($subcategoryVendors)
@@ -210,13 +229,7 @@ class VendorService
     private function applyQueryFilters($query, $request)
     {
         $query->where(function ($query) use ($request) {
-            if ($request->has('is_active')) {
-                $query->where('is_active', $request->is_active);
-            }
 
-            if ($request->has('is_open')) {
-                $query->where('is_open', $request->is_open);
-            }
 
             if ($request->has('subcategories')) {
                 $subcategories = $request->subcategories;
@@ -252,15 +265,16 @@ class VendorService
     {
         $vendor = $this->vendor->with(['subCategories'])->findOrFail($request->id);
         $subcategories = $vendor->subcategories;
-        $vendors = Vendor::where('id', '!=', $request->id)->whereIn('id', function ($query) use ($subcategories) {
-            $query->select('vendor_id')
-                ->from('sub_category_vendor')
-                ->whereIn('sub_category_id', $subcategories->pluck('id'));
-        })
-        ->orderByDesc('visits')
-        ->take(5);
+        $vendors = Vendor::where('id', '!=', $request->id)
+            ->whereIn('id', function ($query) use ($subcategories) {
+                $query
+                    ->select('vendor_id')
+                    ->from('sub_category_vendor')
+                    ->whereIn('sub_category_id', $subcategories->pluck('id'));
+            })
+            ->orderByDesc('visits')
+            ->take(5);
 
         return $vendors;
-
     }
 }

@@ -32,7 +32,7 @@ class VendorRequest extends FormRequest
                 'name_ar'         => 'sometimes',
                 'description'     => 'sometimes',
                 'description_ar'  => 'sometimes',
-                'image'           => 'sometimes|image',
+                'image'           => 'nullable|image',
                 'distance'        => 'nullable',
                 'phone'           => 'nullable',
                 'email'           => 'nullable',

@@ -133,6 +133,8 @@ class Vendor extends Model
         $day = Day::where('name', $currentDay)->first();
         $user = User::where('id', Auth::id())->first();
 
+        $filteredVendors = collect();
+
         foreach ($newQuery as $vendor) {
             $qDay = $vendor->days()->where('day_id', $day->id)->first();
             $fav  = $user->favoriteVendors()->where('vendor_id', $vendor->id)->first();
@@ -147,7 +149,12 @@ class Vendor extends Model
             if (isset($fav)) {
                 $vendor->favorite_status = 1;
             }
+            if (request()->is_open == 1) {
+                if ($vendor->open_status == 1)
+                    $filteredVendors->push($vendor);
+            } else
+                $filteredVendors->push($vendor);
         }
-        return $newQuery;
+        return $filteredVendors;
     }
-}
+    }
