@@ -18,54 +18,13 @@ class VendorService
     public function all($request = null)
     {
 
-
         $query = $this->vendor
             ->with(['category', 'subCategories', 'package', 'features', 'banners'])
             ->withCount('favoriteUsers')
             ->app();
 
         if ($request->all()) {
-            $query->where(function ($query) use ($request) {
-                if ($request->has('is_active')) {
-                    $query->where('is_active', $request->is_active);
-                }
-
-                if ($request->has('is_open')) {
-                    $query->where('is_open', $request->is_open);
-                }
-
-                if ($request->has('subcategories')) {
-                    $subcategories = $request->subcategories;
-                    $query->whereHas('subCategories', function ($query) use ($subcategories) {
-                        $query->whereIn('sub_categories.id', $subcategories);
-                    });
-                }
-                if ($request->has('category')) {
-                    $category = $request->category;
-                    $query->whereHas('category', function ($query) use ($category) {
-                        $query->wherecategory_id('categories.id', $category);
-                    });
-                }
-
-
-                if ($request->has('features')) {
-                    $features = $request->features;
-                    $query->whereHas('features', function ($query) use ($features) {
-                        $query->whereIn('features.id', $features);
-                    });
-                }
-                if ($request->has('rate')) {
-
-                    $query->where('avg_rating', $request->rate);
-                }
-                if ($request->has('latitude') && $request->has('longitude')) {
-                    $latitude = $request->latitude;
-                    $longitude = $request->longitude;
-                    $radius = 10;
-
-                    $query->whereRaw("ST_Distance_Sphere(point(longitude, latitude), point(?, ?)) <= ?", [$longitude, $latitude, $radius * 1000]);
-                }
-            });
+            $this->applyQueryFilters($query, $request);
         }
 
         return $query->get();
@@ -158,5 +117,49 @@ class VendorService
             ->unique('id')
             ->values();
         return $results;
+    }
+    private function applyQueryFilters($query,$request)
+    {
+        $query->where(function ($query) use ($request) {
+            if ($request->has('is_active')) {
+                $query->where('is_active', $request->is_active);
+            }
+
+            if ($request->has('is_open')) {
+                $query->where('is_open', $request->is_open);
+            }
+
+            if ($request->has('subcategories')) {
+                $subcategories = $request->subcategories;
+                $query->whereHas('subCategories', function ($query) use ($subcategories) {
+                    $query->whereIn('sub_categories.id', $subcategories);
+                });
+            }
+            if ($request->has('category')) {
+                $category = $request->category;
+                $query->whereHas('category', function ($query) use ($category) {
+                    $query->wherecategory_id('categories.id', $category);
+                });
+            }
+
+
+            if ($request->has('features')) {
+                $features = $request->features;
+                $query->whereHas('features', function ($query) use ($features) {
+                    $query->whereIn('features.id', $features);
+                });
+            }
+            if ($request->has('rate')) {
+
+                $query->where('avg_rating', $request->rate);
+            }
+            if ($request->has('latitude') && $request->has('longitude')) {
+                $latitude = $request->latitude;
+                $longitude = $request->longitude;
+                $radius = 10;
+
+                $query->whereRaw("ST_Distance_Sphere(point(longitude, latitude), point(?, ?)) <= ?", [$longitude, $latitude, $radius * 1000]);
+            }
+        });
     }
 }
