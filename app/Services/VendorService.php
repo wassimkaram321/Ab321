@@ -24,7 +24,6 @@ class VendorService
             ->with(['category'])
             ->withCount('favoriteUsers')->app();
 
-
         if ($request->all()) {
             $this->applyQueryFilters($query, $request);
         }
