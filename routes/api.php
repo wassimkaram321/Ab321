@@ -1,7 +1,9 @@
 <?php
 
 
+
 use App\Http\Controllers\Api\{
+    AboutController,
     AdController,
     AuthController,
     BannerController,
@@ -11,6 +13,7 @@ use App\Http\Controllers\Api\{
     MainController,
     NotificationController,
     PackageController,
+    PrivacyController,
     ReelController,
     SocialMediaController,
     StoryController,
@@ -73,6 +76,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('vendor_delete', [VendorController::class, 'destroy']);
     Route::post('vendor_status', [VendorController::class, 'changeStatus']);
     Route::get('vendor_by_category', [VendorController::class, 'getCategoryVendors']);
+    Route::get('search', [VendorController::class, 'search']);
     Route::post('nearby-vendors',   [UserController::class, 'getNearbyVendors']);
 
 
@@ -137,6 +141,19 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('remove-favorite-vendor', [UserController::class, 'removeVendorToFavorite']);
     Route::get('get-favorite-vendors',    [UserController::class, 'getFavoriteVendors']);
 
+    Route::get('users',    [UserController::class, 'getAllUsers']);
+
+
+    Route::get('about', [AboutController::class,'show']);
+    Route::post('about-update', [AboutController::class,'update']);
+
+    Route::get('privacy', [PrivacyController::class,'show']);
+    Route::post('privacy-update', [PrivacyController::class,'update']);
+
+    Route::post('nearby-vendors', [UserController::class, 'getNearbyVendors']);
+
+    Route::get('home', [MainController::class, 'home']);
+
 
     Route::get('notifications',             [NotificationController::class, 'index']);
     Route::post('notification-send',        [NotificationController::class, 'store']);
@@ -152,5 +169,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('social-media-store',    [SocialMediaController::class, 'store']);
     Route::post('social-media-update',   [SocialMediaController::class, 'update']);
     Route::delete('social-media-delete', [SocialMediaController::class, 'destroy']);
+
 
 });

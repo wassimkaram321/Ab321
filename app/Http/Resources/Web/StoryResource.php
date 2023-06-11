@@ -14,6 +14,12 @@ class StoryResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id'=>$this->id,
+            'views'=>$this->views,
+            'created_at'=>$this->created_at,
+            'storyDetails'=>$this->storyDetails,
+            'vendor'=>$this->vendor()->get(['id','name','name_ar','image'])
+        ];
     }
 }

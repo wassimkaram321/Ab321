@@ -33,12 +33,19 @@ class ReelRequest extends FormRequest
             case 'show':
                 return $this->show();
             case 'destroy':
-                return $this->show();
+                return $this->destroy();
             default:
                 return [];
         }
     }
     public function show()
+    {
+        # code...
+        return [
+            'id' => 'required',
+        ];
+    }
+    public function destroy()
     {
         # code...
         return [

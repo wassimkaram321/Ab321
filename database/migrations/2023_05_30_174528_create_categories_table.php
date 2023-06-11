@@ -22,6 +22,7 @@ class CreateCategoriesTable extends Migration
             $table->integer('is_active')->default(0);
             $table->string('image')->nullable();
             $table->string('thumbnail')->nullable();
+            $table->string('color')->nullable();
             $table->integer('featured')->default(0);
             $table->timestamps();
         });

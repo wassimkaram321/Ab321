@@ -46,6 +46,8 @@ class VendorRequest extends FormRequest
                 'category_id'     => 'sometimes',
                 "id"              => 'sometimes',
                 'is_active'       => 'nullable',
+                'custom_date'     => 'nullable|date',
+                'website'         => 'nullable',
                 'days'            => 'required|array',
                 'days.*.day_id'   => 'required|exists:days,id',
                 'days.*.open_at'  => 'required',
@@ -53,6 +55,7 @@ class VendorRequest extends FormRequest
                 'social_media'    => 'array',
                 'social_media_.*.id'   => 'exists:social_media,id',
                 'social_media_.*.link' => 'nullable',
+
             ];
         }
         return $rules;

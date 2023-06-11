@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\PasswordRequest;
 use App\Models\OTP;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -47,8 +49,15 @@ class AuthController extends Controller
     }
     public function register(LoginRequest $request)
     {
+
         $request->merge(['password'=>Hash::make($request->password)]);
-        return User::updateOrCreate(['phone' => $request->phone], $request->all());
+        $user = User::updateOrCreate(['phone' => $request->phone], $request->all());
+        if($request->has('avatar')){
+            $user->update([
+                'avatar' => FileHelper::addFile($request->file('avatar'),'images/users'),
+            ]);
+        }
+        return $this->success($user,'success');
     }
     public function userProfile(LoginRequest $request)
     {
@@ -74,20 +83,35 @@ class AuthController extends Controller
         else{
             return $this->error_message('Wrong Code');
         }
-            
+
     }
-    public function resetPassword(LoginRequest $request)
+    public function resetPassword(PasswordRequest $request)
     {
-        $otp = OTP::wherecode($request->code)->get()->first();
-        if($otp->code == $request->code){
-            $user = User::find($otp->phone)->update([
-                'password' => $request->password,
+        if($request->has('phone'))
+        {
+            $otp = OTP::wherecode($request->code)->get()->first();
+            if($otp->code == $request->code){
+                $user = User::find($otp->phone)->update([
+                    'password' => $request->password,
+                ]);
+                return $this->success([],'success');
+            }
+            else{
+                return $this->error_message('Wrong Code');
+            }
+        }
+        else
+        {
+            $user = User::find(auth()->user()->id);
+            if (!Hash::check($request->old_password, $user->password)) {
+                return $this->error_message('Wrong Password');
+            }
+            $user->update([
+                'password' => Hash::make($request->password)
             ]);
             return $this->success([],'success');
         }
-        else{
-            return $this->error_message('Wrong Code');
-        }
-            
+
+
     }
 }

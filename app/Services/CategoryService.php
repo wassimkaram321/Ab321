@@ -9,20 +9,26 @@ class CategoryService
 {
     protected $category;
 
-    public function __construct(Category $category)
+    public function __construct()
     {
-        $this->category = $category;
+        $this->category = new Category();
     }
 
-    public function all()
+    public function all($request)
     {
-        return $this->category
+        return $this->category->app()
             ->with([
                 'subCategories',
                 'ads' => function ($query) {
                     $query->orderByRaw("FIELD(priority, 'high', 'medium', 'low')");
                 }
             ])
+            ->orderBy('featured', 'desc')
+            ->get();
+    }
+    public function allWithOut($request)
+    {
+        return $this->category->app()
             ->orderBy('featured', 'desc')
             ->get();
     }
@@ -40,25 +46,38 @@ class CategoryService
 
     public function create($request)
     {
-
-        if ($request->has('image'))
-            FileHelper::addFile($request->image);
-        if ($request->has('thumbnail'))
-            FileHelper::addFile($request->thumbnail);
         $category = $this->category->create($request->all());
-        $this->addImage($category, $request->file('image'), $request->file('thumbnail'));
+        if ($request->has('image')){
+            $file_name = FileHelper::addFile($request->file('image'),'images/categories');
+            $category->image = $file_name;
+            $category->save();
+        }
+
+        if ($request->has('thumbnail')){
+            $file_name = FileHelper::addFile($request->file('thumbnail'),'images/categories');
+            $category->thumbnail = $file_name;
+            $category->save();
+        }
+
+        // $this->addImage($category, $request->file('image'), $request->file('thumbnail'));
         return $category;
     }
 
     public function update($request)
     {
-        if ($request->has('image'))
-            FileHelper::addFile($request->image);
-        if ($request->has('thumbnail'))
-            FileHelper::addFile($request->thumbnail);
         $category = $this->category->findOrFail($request->id);
         $category->update($request->all());
-        $this->addImage($category, $request->file('image'), $request->file('thumbnail'));
+        if ($request->has('image')){
+            $file_name = FileHelper::addFile($request->file('image'),'images/categories');
+            $category->image = $file_name;
+            $category->save();
+        }
+
+        if ($request->has('thumbnail')){
+            $file_name = FileHelper::addFile($request->file('thumbnail'),'images/categories');
+            $category->thumbnail = $file_name;
+            $category->save();
+        }
         return $category;
     }
 
