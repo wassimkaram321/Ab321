@@ -23,7 +23,7 @@ class VendorService
             ->with(['days', 'category', 'subCategories', 'socialMedia', 'package', 'features', 'banners'])
             ->withCount('favoriteUsers')->app();
 
-      
+
 
         if ($request->all()) {
             $this->applyQueryFilters($query, $request);
@@ -53,13 +53,13 @@ class VendorService
                 $vendor->socialMedia()->attach([$social_media['id'] => ['link' => $social_media['link']]]);
             }
 
-        if ($request->has('image')) {
-            $file_name = FileHelper::addFile($request->image);
-            $vendor->image = $file_name;
-            $vendor->save();
-
+            if ($request->has('image')) {
+                $file_name = FileHelper::addFile($request->image);
+                $vendor->image = $file_name;
+                $vendor->save();
+            }
+            return $vendor;
         }
-        return $vendor;
     }
 
     public function update($request)
@@ -165,7 +165,7 @@ class VendorService
             ->values();
         return $results;
     }
-    private function applyQueryFilters($query,$request)
+    private function applyQueryFilters($query, $request)
     {
         $query->where(function ($query) use ($request) {
             if ($request->has('is_active')) {
