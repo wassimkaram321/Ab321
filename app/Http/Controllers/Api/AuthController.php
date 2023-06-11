@@ -60,7 +60,8 @@ class AuthController extends Controller
     }
     public function userProfile(LoginRequest $request)
     {
-        $data = Auth::user();
+        $data = User::where('id', Auth::id())->first();
+        $data->unseen_notification_count = $data->notifications()->where('seen', 0)->orderBy('created_at', 'desc')->count();
         return $this->success($data, 'success');
     }
     public function generateOTP(LoginRequest $request)
