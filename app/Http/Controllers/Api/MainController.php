@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 
 
-    
+
 
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
@@ -25,13 +25,12 @@ class MainController extends Controller
     public function home(Request $request)
     {
         $data = $this->mainServices->home($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
-    
+
     public function days()
     {
         $data = Day::get();
-        return $this->success($data, 'Success');
+        return $this->success($data, 'success');
     }
-
 }

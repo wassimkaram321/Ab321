@@ -51,6 +51,6 @@ class BannerController extends Controller
     public function updateStatus(BannerRequest $bannerRequest)
     {
         $this->bannerServices->updateStatus($bannerRequest);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;;
+
 use App\Traits\ResponseTrait;
 use App\Services\UserService;
 use App\Http\Requests\UserRequest;
@@ -26,7 +27,7 @@ class UserController extends Controller
     {
         //
         $data = $this->userServices->all($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
 
@@ -40,7 +41,7 @@ class UserController extends Controller
     {
         //
         $data = $this->userServices->create($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -53,7 +54,7 @@ class UserController extends Controller
     {
         //
         $data = $this->userServices->find($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
 
@@ -68,7 +69,7 @@ class UserController extends Controller
     {
         //
         $data = $this->userServices->update($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -81,42 +82,41 @@ class UserController extends Controller
     {
         //
         $this->userServices->delete($request);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
 
     public function addVendorToFavorite(UserRequest $request)
     {
         $data = $this->userServices->addVendorToFavorite($request);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
 
     public function removeVendorToFavorite(UserRequest $request)
     {
         $data = $this->userServices->removeVendorToFavorite($request);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
 
     public function getFavoriteVendors(UserRequest $request)
     {
         $data = $this->userServices->getFavoriteVendors($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     public function getNearbyVendors(UserRequest $request)
     {
         $data = $this->userServices->getNearbyVendors($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     public function getAllUsers(UserRequest $request)
     {
         $data = $this->userServices->getAllUsers($request);
-
     }
     public function changeEnableNotification(UserRequest $request)
     {
         $data = $this->userServices->changeEnableNotification($request);
 
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 }

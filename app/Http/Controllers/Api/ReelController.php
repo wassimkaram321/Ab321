@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Reel;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;;
+
 use App\Traits\ResponseTrait;
 use App\Services\ReelService;
 use App\Http\Requests\ReelRequest;
@@ -26,7 +27,7 @@ class ReelController extends Controller
     {
         //
         $data = $this->reelServices->all($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
 
@@ -40,7 +41,7 @@ class ReelController extends Controller
     {
         //
         $data = $this->reelServices->create($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -53,7 +54,7 @@ class ReelController extends Controller
     {
         //
         $data = $this->reelServices->find($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
 
@@ -65,11 +66,11 @@ class ReelController extends Controller
      * @param  \App\Models\Reel  $reel
      * @return \Illuminate\Http\Response
      */
-    public function update(ReelRequest $request,$id)
+    public function update(ReelRequest $request, $id)
     {
         //
         $data = $this->reelServices->update($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -82,14 +83,12 @@ class ReelController extends Controller
     {
         //
         $this->reelServices->delete($request);
-        return $this->success([],'success');
-
+        return $this->success([], 'success');
     }
     public function seenReels(ReelRequest $request)
     {
         //
         $this->reelServices->seenReels($request);
-        return $this->success([],'success');
-
+        return $this->success([], 'success');
     }
 }

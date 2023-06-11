@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Privacy;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;;
+
 use App\Traits\ResponseTrait;
 use App\Services\PrivacyService;
 use App\Http\Requests\PrivacyRequest;
@@ -26,7 +27,7 @@ class PrivacyController extends Controller
     {
         //
         $data = $this->privacyServices->all($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
 
@@ -40,7 +41,7 @@ class PrivacyController extends Controller
     {
         //
         $data = $this->privacyServices->create($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -53,7 +54,7 @@ class PrivacyController extends Controller
     {
         //
         $data = $this->privacyServices->find($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
 
@@ -69,7 +70,7 @@ class PrivacyController extends Controller
     {
         //
         $data = $this->privacyServices->update($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -82,7 +83,6 @@ class PrivacyController extends Controller
     {
         //
         $this->privacyServices->delete($request);
-        return $this->success([],'success');
-
+        return $this->success([], 'success');
     }
 }

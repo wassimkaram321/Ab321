@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Helpers\FileHelper;
 use App\Models\Category;
 use App\Models\Day;
+use App\Models\SubCategory;
 use App\Models\Vendor;
 use Carbon\Carbon;
 
@@ -20,22 +21,19 @@ class VendorService
     public function all($request = null)
     {
         $query = $this->vendor
-            ->with(['days', 'category', 'subCategories', 'socialMedia', 'package', 'features', 'banners'])
+            ->with(['category'])
             ->withCount('favoriteUsers')->app();
-
-
 
         if ($request->all()) {
             $this->applyQueryFilters($query, $request);
         }
 
-        return $query->get();
+        return $query;
     }
 
     public function find($request)
     {
-
-        return $this->vendor->with(['days', 'category', 'subCategories', 'socialMedia', 'banners'])->withCount('favoriteUsers')->findOrFail($request->id);
+        return $this->vendor->with(['days', 'category', 'subCategories', 'socialMedia', 'features', 'banners'])->withCount('favoriteUsers')->app()->where('id', $request->id);
     }
 
     public function create($request)
@@ -208,5 +206,21 @@ class VendorService
                 $query->whereRaw("ST_Distance_Sphere(point(longitude, latitude), point(?, ?)) <= ?", [$longitude, $latitude, $radius * 1000]);
             }
         });
+    }
+
+    public function recomendation($request)
+    {
+        $vendor = $this->vendor->with(['subCategories'])->findOrFail($request->id);
+        $subcategories = $vendor->subcategories;
+        $vendors = Vendor::where('id', '!=', $request->id)->whereIn('id', function ($query) use ($subcategories) {
+            $query->select('vendor_id')
+                ->from('sub_category_vendor')
+                ->whereIn('sub_category_id', $subcategories->pluck('id'));
+        })
+        ->orderByDesc('visits')
+        ->take(5);
+
+        return $vendors;
+
     }
 }

@@ -27,7 +27,7 @@ class NotificationController extends Controller
     public function index(NotificationRequest $request)
     {
         $data = $this->notificationServices->all($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
 
@@ -40,7 +40,7 @@ class NotificationController extends Controller
     public function store(NotificationRequest $request)
     {
         $data = $this->notificationServices->create($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -53,7 +53,7 @@ class NotificationController extends Controller
     {
         //
         $data = $this->notificationServices->find($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
 
@@ -68,7 +68,7 @@ class NotificationController extends Controller
     {
         //
         $data = $this->notificationServices->update($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -80,13 +80,13 @@ class NotificationController extends Controller
     public function destroy(NotificationRequest $request)
     {
         $this->notificationServices->delete($request);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
 
     public function seeAll(NotificationRequest $request)
     {
         $this->notificationServices->seeAll($request);
-        return $this->success([],'success');
+        return $this->success([], 'success');
     }
 
     public function unseenCount(NotificationRequest $request)
@@ -94,5 +94,4 @@ class NotificationController extends Controller
         $data = $this->notificationServices->unseenCount($request);
         return $this->success($data, 'success');
     }
-
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\SocialMedia;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;;
+
 use App\Traits\ResponseTrait;
 use App\Services\SocialMediaService;
 use App\Http\Requests\SocialMediaRequest;
@@ -25,7 +26,7 @@ class SocialMediaController extends Controller
     public function index(SocialMediaRequest $request)
     {
         $data = $this->socialMediaServices->all($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
 
@@ -38,7 +39,7 @@ class SocialMediaController extends Controller
     public function store(SocialMediaRequest $request)
     {
         $data = $this->socialMediaServices->create($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -50,7 +51,7 @@ class SocialMediaController extends Controller
     public function show(SocialMediaRequest $request)
     {
         $data = $this->socialMediaServices->find($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
 
@@ -65,7 +66,7 @@ class SocialMediaController extends Controller
     public function update(SocialMediaRequest $request)
     {
         $data = $this->socialMediaServices->update($request);
-        return $this->success($data,'success');
+        return $this->success($data, 'success');
     }
 
     /**
@@ -77,7 +78,6 @@ class SocialMediaController extends Controller
     public function destroy(SocialMediaRequest $request)
     {
         $this->socialMediaServices->delete($request);
-        return $this->success([],'success');
-
+        return $this->success([], 'success');
     }
 }
