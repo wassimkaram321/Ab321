@@ -18,4 +18,10 @@ class MainAd extends Model
         'is_active',
         'image',
     ];
+    public static function booted()
+    {
+        static::retrieved(function ($ad) {
+            $ad->image = asset('images/mainAds' . $ad->image);
+        });
+    }
 }

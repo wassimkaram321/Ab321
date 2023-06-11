@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Story;
+use App\Models\User;
 use App\Models\Vendor;
 
 class StoryService
@@ -18,6 +19,10 @@ class StoryService
     {
         $vendor = Vendor::findOrFail($request->vendor_id);
         return $vendor->stories()->with('storyDetails')->get();
+    }
+    public function getAll($request)
+    {
+       return $this->story->with('vendor')->get();
     }
 
     public function find($request)
@@ -57,6 +62,11 @@ class StoryService
     }
     public function seenStories($request)
     {
-        $this->story->findOrFail($request->id)->delete();
+        $ids = $request->ids;
+        $userId = auth()->user()->id;
+        $user = User::findOrFail($userId);
+        foreach($ids as $id){
+            $user->stories()->syncWithoutDetaching($id);
+        }
     }
 }

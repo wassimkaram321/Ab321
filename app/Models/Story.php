@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class Story extends Model
 {
@@ -31,6 +32,9 @@ class Story extends Model
         static::deleting(function ($story) {
             $story->storyDetails()->delete();
             DB::table('story_user')->where('story_id',$story->id)->delete();
+            Storage::remove('images/'.$story->image);
+            Storage::remove('images/'.$story->video);
+
         });
     }
 }

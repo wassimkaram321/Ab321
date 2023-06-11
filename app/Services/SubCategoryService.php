@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\SubCategory;
 use App\Helpers\FileHelper;
+use App\Models\Category;
+
 class SubCategoryService
 {
     protected $subCategory;
@@ -13,8 +15,14 @@ class SubCategoryService
         $this->subCategory = $subCategory;
     }
 
-    public function all()
+    public function all($request = null)
     {
+        if($request){
+            if($request->has('category_id')){
+                $category = Category::findOrFail($request->category_id);
+                return $category->subCategories;
+            }
+        }
         return $this->subCategory->with('category')->get();
     }
 
@@ -25,25 +33,40 @@ class SubCategoryService
 
     public function create($request)
     {
-       
-        if ($request->has('image'))
-            FileHelper::addFile($request->image);
-        if ($request->has('thumbnail'))
-            FileHelper::addFile($request->thumbnail);
         $subCategory = $this->subCategory->create($request->all());
-        $this->addImage($subCategory,$request->file('image') , $request->file('thumbnail'));
+        if ($request->has('image')){
+            $file_name = FileHelper::addFile($request->file('image'),'images/categories');
+            $subCategory->image = $file_name;
+            $subCategory->save();
+        }
+
+        if ($request->has('thumbnail')){
+            $file_name = FileHelper::addFile($request->file('thumbnail'),'images/categories');
+            $subCategory->thumbnail = $file_name;
+            $subCategory->save();
+        }
+
+        // $this->addImage($subCategory,$request->file('image') , $request->file('thumbnail'));
         return $subCategory;
     }
 
     public function update($request)
     {
-        if ($request->has('image'))
-            FileHelper::addFile($request->image);
-        if ($request->has('thumbnail'))
-            FileHelper::addFile($request->thumbnail);
         $subCategory = $this->subCategory->findOrFail($request->id);
         $subCategory->update($request->all());
-        $this->addImage($subCategory,$request->file('image') , $request->file('thumbnail'));
+        if ($request->has('image')){
+            $file_name = FileHelper::addFile($request->file('image'),'images/categories');
+            $subCategory->image = $file_name;
+            $subCategory->save();
+        }
+
+        if ($request->has('thumbnail')){
+            $file_name = FileHelper::addFile($request->file('thumbnail'),'images/categories');
+            $subCategory->thumbnail = $file_name;
+            $subCategory->save();
+        }
+
+        // $this->addImage($subCategory,$request->file('image') , $request->file('thumbnail'));
         return $subCategory;
     }
 

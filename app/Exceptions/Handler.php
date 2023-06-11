@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Spatie\Permission\Exceptions\UnauthorizedException;
@@ -63,6 +64,10 @@ class Handler extends ExceptionHandler
             $code = 500;
             $msg = 'Model not found';
         }
+        // else if($e instanceOf QueryException){
+        //     $code = 500;
+        //     $msg = 'Invalid Query';
+        // }
 
         if (!$code || $code > 599 ||  $code <= 0 || gettype($code) !== "integer") {
             $code = 500;

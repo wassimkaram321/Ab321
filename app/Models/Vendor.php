@@ -34,6 +34,8 @@ class Vendor extends Model
         'category_id',
         'package_id',
         'visits',
+        'custom_date',
+        'website',
     ];
 
     public function banners()
@@ -51,8 +53,7 @@ class Vendor extends Model
     }
     public function features()
     {
-        return $this->belongsToMany(Feature::class, 'feature_vendor')
-            ->withPivot('content');
+        return $this->belongsToMany(Feature::class, 'feature_vendor');
     }
     public function package()
     {
@@ -80,16 +81,20 @@ class Vendor extends Model
         static::creating(function ($model) {
             $model->start_date = date('Y-m-d', strtotime($model->start_date));
             $model->expire_date = date('Y-m-d', strtotime($model->expire_date));
+            $model->custom_date = date('Y-m-d', strtotime($model->custom_date));
         });
         static::updating(function ($model) {
             $model->start_date = date('Y-m-d', strtotime($model->start_date));
-            $model->expire_date = date('Y-m-d', strtotime($model->expire_date));
+            $model->custom_date = date('Y-m-d', strtotime($model->custom_date));
         });
         static::deleting(function ($vendor) {
             $vendor->subcategories()->detach();
             $vendor->features()->detach();
             $vendor->banners()->delete();
             $vendor->reels()->delete();
+        });
+        static::retrieved(function ($vendor) {
+            $vendor->image = asset('images/vendors/' . $vendor->image);
         });
 
     }

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helpers\FileHelper;
 use App\Models\Package;
 use App\Models\Vendor;
 
@@ -51,7 +52,11 @@ class PackageService
        $vendor = Vendor::findOrFail($request->vendor_id);
        $features = $request->features;
        foreach($features as $feature){
-        $vendor->features()->attach($feature['feature_id'], ['content' => $feature['content']]);
+        $feature_icon = FileHelper::addFile($feature['icon'],'images/features');
+        $vendor->features()->attach(
+            $feature['feature_id'],
+            ['content' => $feature['content'],'icon'=>$feature_icon]
+        );
        }
        return $vendor->with('features');
     }

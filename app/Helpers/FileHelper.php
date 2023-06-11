@@ -5,7 +5,7 @@ class FileHelper
     public static function addFile($image , $path = 'images'){
 
         $file_extension = $image->getClientOriginalExtension();
-        $file_name = time() . '.' . $file_extension;
+        $file_name = rand(1,100).time() . '.' . $file_extension;
         $image->move($path, $file_name);
         $image = $file_name;
         return $file_name;

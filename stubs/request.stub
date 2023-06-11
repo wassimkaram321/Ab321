@@ -57,6 +57,7 @@ class {{ class }} extends FormRequest
         return [
 
         ];
+        
     }
     public function update()
     {

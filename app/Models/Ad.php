@@ -29,5 +29,11 @@ class Ad extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+    public static function booted()
+    {
+        static::retrieved(function ($ad) {
+            $ad->image = asset('images/categoryAds' . $ad->image);
+        });
+    }
 
 }

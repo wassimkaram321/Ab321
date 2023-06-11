@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
+use App\Jobs\SaveFile;
 use App\Models\Category;
 use App\Services\CategoryService;
 use App\Traits\ResponseTrait;
@@ -22,10 +23,10 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $categoryRequest)
     {
         //
-        $categories = $this->categoryService->all();
+        $categories = $this->categoryService->all($categoryRequest);
         return $this->success($categories,'Success');
     }
     public function find(CategoryRequest $categoryRequest)

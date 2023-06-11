@@ -30,5 +30,9 @@ class SubCategory extends Model
         static::deleting(function ($subcategory) {
             $subcategory->vendors()->detach();
         });
+        static::retrieved(function ($subcategory) {
+            $subcategory->image = asset('images/subcategories/' . $subcategory->image);
+            $subcategory->thumbnail = asset('images/subcategories/' . $subcategory->thumbnail);
+        });
     }
 }
