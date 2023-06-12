@@ -19,10 +19,11 @@ class SubCategoryService
     {
         if($request){
             if($request->has('category_id')){
-                $category = Category::findOrFail($request->category_id);
-                return $category->subCategories;
+                $category = Category::with(['ads','subCategories'])->findOrFail($request->category_id);
+                return ['subcategoris'=>$category->subCategories,'ads'=> $category->ads];
             }
         }
+
         return $this->subCategory->with('category')->get();
     }
 
