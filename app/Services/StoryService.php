@@ -18,7 +18,13 @@ class StoryService
     public function all($request)
     {
         $vendor = Vendor::findOrFail($request->vendor_id);
-        return $vendor->stories()->with('storyDetails')->get();
+        return $vendor
+        ->with([
+            'stories' => function ($query) {
+                $query->with('storyDetails');
+            }
+        ])
+        ->get();
     }
     public function getAll($request)
     {

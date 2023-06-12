@@ -38,6 +38,8 @@ class LoginRequest extends FormRequest
                 return $this->generateOTP();
             case 'resetPassword':
                 return $this->resetPassword();
+            case 'createDeviceToken':
+                return $this->token();
             default:
                 return [];
         }
@@ -87,6 +89,13 @@ class LoginRequest extends FormRequest
 
         return [
 
+        ];
+    }
+    public function token()
+    {
+
+        return [
+            'device_token'=>'required'
         ];
     }
     public function getFunctionName(): string

@@ -23,7 +23,7 @@ class AuthController extends Controller
     {
         $user = User::where('email', $request->email)->orWhere('phone', $request->phone)->first();
         $hash = Hash::check($request->password, $user->password);
-        $data = ['id' => $user->id, 'name' => $user->name, 'email' => $user->email];
+        $data = ['id' => $user->id, 'name' => $user->name, 'email' => $user->email,'phone'=>$user->phone];
         if ($hash == 0) {
             return $this->error_message('wrong password');
         } elseif (!$data) {
@@ -39,11 +39,16 @@ class AuthController extends Controller
     {
 
         $user = User::find(Auth::id());
+
         if (!empty($user)) {
             $request->user()->currentAccessToken()->delete();
+            $user->update([
+                'device_token'=>null
+            ]);
         } else {
             $this->error_message('User Not Found');
         }
+
         return $this->success([], 'success');
     }
     public function register(LoginRequest $request)
@@ -107,4 +112,21 @@ class AuthController extends Controller
             return $this->success([], 'success');
         }
     }
+    public function createDeviceToken(LoginRequest $request)
+    {
+        $id = Auth::id();
+        User::findOrFail($id)->update([
+            'device_token' => $request->device_token
+        ]);
+        return $this->success([], 'success');
+    }
+    public function deleteDeviceToken(LoginRequest $request)
+    {
+        $id = Auth::id();
+        User::findOrFail($id)->update([
+            'device_token' => null
+        ]);
+        return $this->success([], 'success');
+    }
+
 }

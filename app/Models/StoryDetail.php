@@ -45,14 +45,5 @@ class StoryDetail extends Model
                 $storyDetail->video = $videoPath;
             }
         });
-        static::retrieved(function ($storyDetail) {
-
-            if ($storyDetail->image || $storyDetail->video) {
-                $userId = auth()->user()->id;
-                $user = User::findOrFail($userId);
-                $storyDetailId = $storyDetail->id;
-                // $user->stories()->sync($storyDetailId);
-            }
-        });
     }
 }

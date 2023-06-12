@@ -21,7 +21,7 @@ class Story extends Model
     }
     public function storyDetails()
     {
-        return $this->hasMany(StoryDetail::class);
+        return $this->hasMany(StoryDetail::class ,'story_id');
     }
     public function users()
     {
@@ -32,8 +32,8 @@ class Story extends Model
         static::deleting(function ($story) {
             $story->storyDetails()->delete();
             DB::table('story_user')->where('story_id',$story->id)->delete();
-            Storage::remove('images/'.$story->image);
-            Storage::remove('images/'.$story->video);
+            // Storage::remove('images/'.$story->image);
+            // Storage::remove('images/'.$story->video);
 
         });
     }
