@@ -55,7 +55,8 @@ class StoryDetailsRequest extends FormRequest
     {
         # code...
         return [
-
+            'image' => 'required|image',
+            'video' => 'nullable|mimetypes:video/mp4,video/mpeg'
         ];
     }
     public function update()

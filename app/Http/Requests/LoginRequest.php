@@ -64,7 +64,7 @@ class LoginRequest extends FormRequest
     {
         # code...
         return [
-            'phone' => 'unique:otps,phone',
+            'phone' => 'required',
         ];
     }
     public function resetPassword()

@@ -38,7 +38,9 @@ class StoryService
 
     public function create($request)
     {
-        $story = $this->story->wherevendor_id($request->vendor_id)->first();
+
+        $vendor = Vendor::findOrFail($request->vendor_id);
+        $story = $this->story->wherevendor_id($vendor->id)->first();
 
         if($story == null)
         {
