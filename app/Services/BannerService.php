@@ -42,7 +42,9 @@ class BannerService
         $banner->update($request->all());
 
         if ($request->has('image')) {
+            $image = $banner->image;
             $banner->image = FileHelper::addFile(request()->file('image'), 'images/banners');
+            FileHelper::deleteFile($image,'images/banners');
         }
         $banner->save();
 
@@ -51,7 +53,10 @@ class BannerService
 
     public function delete($request)
     {
-        $this->banner->findOrFail($request->id)->delete();
+        $banner = $this->banner->findOrFail($request->id);
+        FileHelper::deleteFile($banner->image,'images/banners');
+        $banner->delete();
+
     }
 
     public function updateStatus($request)

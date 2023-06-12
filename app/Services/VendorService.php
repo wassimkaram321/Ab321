@@ -21,12 +21,11 @@ class VendorService
     public function all($request = null)
     {
 
-        $query = $this->vendor->with(['category'])->withCount('favoriteUsers');
+        $query = $this->vendor->withCount('favoriteUsers');
 
         if ($request->all()) {
             $query = $this->applyQueryFilters($query, $request);
             return $query->app();
-
         }
 
         return $query->app();
@@ -55,14 +54,14 @@ class VendorService
             foreach ($request->social_media as $social_media) {
                 $vendor->socialMedia()->attach([$social_media['id'] => ['link' => $social_media['link']]]);
             }
-
-            if ($request->has('image')) {
-                $file_name = FileHelper::addFile($request->image);
-                $vendor->image = $file_name;
-                $vendor->save();
-            }
-            return $vendor;
         }
+
+        if ($request->has('image')) {
+            $file_name = FileHelper::addFile($request->image);
+            $vendor->image = $file_name;
+            $vendor->save();
+        }
+        return $vendor;
     }
 
     public function update($request)
@@ -70,20 +69,20 @@ class VendorService
         $subCategories = $request->subcategories ?? [];
         $vendor = $this->vendor->findOrFail($request->id);
         if ($request->has('image')) {
+            $vendor->update($request->all());
             $file_name = FileHelper::addFile($request->image);
             $vendor->image = $file_name;
             $vendor->save();
         }
         $vendor->subcategories()->detach();
         $vendor->subcategories()->attach($subCategories);
-        $vendor->update($request->all());
         if (isset($request->days)) {
             foreach ($request->days as $day) {
                 if (
                     $vendor
-                        ->days()
-                        ->where('days.id', $day['day_id'])
-                        ->exists()
+                    ->days()
+                    ->where('days.id', $day['day_id'])
+                    ->exists()
                 ) {
                     $vendor->days()->updateExistingPivot($day['day_id'], ['open_at' => $day['open_at'], 'close_at' => $day['close_at']]);
                 } else {
@@ -106,9 +105,9 @@ class VendorService
             foreach ($request->social_media as $social_media) {
                 if (
                     $vendor
-                        ->socialMedia()
-                        ->where('social_media.id', $social_media['id'])
-                        ->exists()
+                    ->socialMedia()
+                    ->where('social_media.id', $social_media['id'])
+                    ->exists()
                 ) {
                     $vendor->socialMedia()->updateExistingPivot($social_media['id'], ['link' => $social_media['link']]);
                 } else {

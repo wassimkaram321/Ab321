@@ -53,9 +53,11 @@ class ReelService
         $reel = $this->reel->findOrFail($request->id);
         $reel->update($request->all());
         if ($request->has('video')) {
+            $video = $reel->video;
             $reel->update([
                 'video'=>FileHelper::addFile(request()->file('video'), 'images/reels'),
             ]);
+            FileHelper::deleteFile($video,'images/reels');
         }
         return $reel;
     }
@@ -63,7 +65,9 @@ class ReelService
     public function delete($request)
     {
 
-        $this->reel->findOrFail($request->id)->delete();
+        $reel = $this->reel->findOrFail($request->id);
+        FileHelper::deleteFile($reel->video,'images/reels');
+        $reel->delete();
     }
     public function seenReels($request)
     {

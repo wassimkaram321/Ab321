@@ -8,6 +8,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\PasswordRequest;
 use App\Models\OTP;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use App\Services\AuthControllerService;
@@ -58,9 +59,11 @@ class AuthController extends Controller
         $request->merge(['password' => Hash::make($request->password)]);
         $user = User::updateOrCreate(['phone' => $request->phone], $request->all());
         if ($request->has('avatar')) {
+            $image = $user->avatar;
             $user->update([
                 'avatar' => FileHelper::addFile($request->file('avatar'), 'images/users'),
             ]);
+            FileHelper::deleteFile($image,'images/users');
         }
         return $this->success($user, 'success');
     }
@@ -126,6 +129,11 @@ class AuthController extends Controller
         User::findOrFail($id)->update([
             'device_token' => null
         ]);
+        return $this->success([], 'success');
+    }
+    public function deleteUser(LoginRequest $request)
+    {
+        (new UserService)->delete($request);
         return $this->success([], 'success');
     }
 

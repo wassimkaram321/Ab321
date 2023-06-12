@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helpers\FileHelper;
 use App\Models\Feature;
 
 class FeatureService
@@ -25,7 +26,12 @@ class FeatureService
 
     public function create($request)
     {
-        return $this->feature->create($request->all());
+        $feature = $this->feature->create($request->all());
+        if($request->has('icon')){
+            $icon = FileHelper::addFile($request->file('icon'),'images/features');
+            $feature->icon = $icon;
+            $feature->save();
+        }
     }
 
     public function update($request)
@@ -35,6 +41,9 @@ class FeatureService
 
     public function delete($request)
     {
-        $this->feature->findOrFail($request->id)->delete();
+        $feature = $this->feature->findOrFail($request->id);
+        FileHelper::deleteFile($feature->icon,'images/features');
+        $feature->delete();
+
     }
 }

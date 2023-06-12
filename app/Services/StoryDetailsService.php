@@ -47,6 +47,7 @@ class StoryDetailsService
 
     public function delete($request)
     {
-        $this->storyDetails->findOrFail($request->id)->delete();
+        $storyDetails = $this->storyDetails->findOrFail($request->id);
+        $storyDetails->delete();
     }
 }

@@ -42,7 +42,10 @@ class MainAdService
         $mainAd->update($request->all());
 
         if ($request->has('image')) {
+            $image = $mainAd->image;
             $mainAd->image = FileHelper::addFile(request()->file('image'), 'images/mainAds');
+            FileHelper::deleteFile($image,'images/mainAds');
+
         }
         $mainAd->save();
 
@@ -51,7 +54,9 @@ class MainAdService
 
     public function delete($request)
     {
-        $this->mainAd->findOrFail($request->id)->delete();
+        $mainAd =  $this->mainAd->findOrFail($request->id);
+        FileHelper::deleteFile($mainAd->image,'images/mainAds');
+        $mainAd->delete();
     }
 
     public function updateStatus($request)

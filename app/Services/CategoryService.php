@@ -68,13 +68,17 @@ class CategoryService
         $category = $this->category->findOrFail($request->id);
         $category->update($request->all());
         if ($request->has('image')){
+            $image = $category->image;
             $file_name = FileHelper::addFile($request->file('image'),'images/categories');
+            FileHelper::deleteFile($image,'images/categories');
             $category->image = $file_name;
             $category->save();
         }
 
         if ($request->has('thumbnail')){
+            $thumbnail = $category->thumbnail;
             $file_name = FileHelper::addFile($request->file('thumbnail'),'images/categories');
+            FileHelper::deleteFile($thumbnail,'images/categories');
             $category->thumbnail = $file_name;
             $category->save();
         }
@@ -87,6 +91,8 @@ class CategoryService
         $category->subCategories()->delete();
         $category->vendors()->delete();
         $category->ads()->delete();
+        FileHelper::deleteFile($category->image,'images/categories');
+        FileHelper::deleteFile($category->thumbnail,'images/categories');
         $category->delete();
     }
     public function changeStatus($request)

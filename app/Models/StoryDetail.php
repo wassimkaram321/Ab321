@@ -36,15 +36,19 @@ class StoryDetail extends Model
         });
         static::updating(function ($storyDetail) {
             if (request()->hasFile('image')) {
+                $image = $storyDetail->image;
                 $imagePath = FileHelper::addFile(request()->file('image'), 'images/stories');
+                FileHelper::deleteFile($image, 'images/stories');
                 $storyDetail->image = $imagePath;
             }
 
             if (request()->hasFile('video')) {
+                $video = $storyDetail->video;
                 $videoPath = FileHelper::addFile(request()->file('video'), 'images/stories');
+                FileHelper::deleteFile($video, 'images/stories');
                 $storyDetail->video = $videoPath;
             }
         });
-      
+
     }
 }

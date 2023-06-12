@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helpers\FileHelper;
 use App\Models\User;
 use App\Models\Vendor;
 use App\Traits\distanceItineraryTrait;
@@ -40,7 +41,9 @@ class UserService
 
     public function delete($request)
     {
-        $this->user->findOrFail($request->id)->delete();
+       $user =  $this->user->findOrFail($request->id);
+       FileHelper::deleteFile($user->avatar,'images/users');
+       $user->delete();
     }
 
     public function addVendorToFavorite($request)

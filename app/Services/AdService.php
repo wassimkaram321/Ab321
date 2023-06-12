@@ -40,18 +40,19 @@ class AdService
     {
         $ad = $this->ad->findOrFail($request->id);
         $ad->update($request->all());
-
         if ($request->has('image')) {
+            $image = $ad->image;
             $ad->image = FileHelper::addFile(request()->file('image'), 'images/categoryAds');
+            FileHelper::deleteFile($image,'images/categoryAds');
         }
-        $ad->save();
-
         return $ad;
     }
 
     public function delete($request)
     {
-        $this->ad->findOrFail($request->id)->delete();
+        $ad =  $this->ad->findOrFail($request->id);
+        FileHelper::deleteFile($ad->image,'images/categoryAds');
+        $ad->delete();
     }
 
     public function updateStatus($request)

@@ -14,7 +14,7 @@ class Vendor extends Model
 {
     use HasFactory, HasReviewRating;
     public $timestamps = true;
-
+    public $with = ['category'];
     protected $fillable = [
         'name',
         'name_ar',
@@ -133,24 +133,27 @@ class Vendor extends Model
         $currentDay = Carbon::now()->format('l');
         $currentTime = Carbon::now()->format('H:i:s');
         $day = Day::where('name', $currentDay)->first();
-        $user = User::where('id', Auth::id())->first();
+        $user = User::where('id', Auth::guard('api')->id())->first();
 
         foreach ($newQuery as $vendor) {
             $qDay = $vendor->days()->where('day_id', $day->id)->first();
-            $fav  = $user->favoriteVendors()->where('vendor_id', $vendor->id)->first();
+
+            $vendor->favorite_status = 0;
+            if (isset($user)) {
+
+                $fav  = $user->favoriteVendors()->where('vendor_id', $vendor->id)->first();
+                if (isset($fav)) {
+                    $vendor->favorite_status = 1;
+                }
+            }
 
 
             $vendor->open_status = 0;
-            $vendor->favorite_status = 0;
             if (isset($qDay)) {
                 if ($qDay->pivot->open_at < $currentTime && $qDay->pivot->close_at > $currentTime) {
                     $vendor->open_status = 1;
                 }
             }
-            if (isset($fav)) {
-                $vendor->favorite_status = 1;
-            }
-
         }
         return $newQuery;
     }
