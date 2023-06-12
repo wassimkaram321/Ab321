@@ -44,6 +44,5 @@ class FeatureService
         $feature = $this->feature->findOrFail($request->id);
         FileHelper::deleteFile($feature->icon,'images/features');
         $feature->delete();
-
     }
 }
