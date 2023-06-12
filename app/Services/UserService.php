@@ -58,7 +58,8 @@ class UserService
     public function getFavoriteVendors($request)
     {
         $user = $this->user->findOrFail(Auth::id());
-        $favoriteVendors = $user->favoriteVendors;
+        $userFavoriteVendorIds = $user->favoriteVendors()->pluck('vendor_id');
+        $favoriteVendors = Vendor::whereIn('id', $userFavoriteVendorIds)->app();
         return $favoriteVendors;
     }
     public function getNearbyVendors($request)

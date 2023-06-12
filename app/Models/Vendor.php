@@ -7,6 +7,8 @@ use Digikraaft\ReviewRating\Traits\HasReviewRating;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class Vendor extends Model
 {
@@ -133,11 +135,10 @@ class Vendor extends Model
         $day = Day::where('name', $currentDay)->first();
         $user = User::where('id', Auth::id())->first();
 
-        $filteredVendors = collect();
-
         foreach ($newQuery as $vendor) {
             $qDay = $vendor->days()->where('day_id', $day->id)->first();
             $fav  = $user->favoriteVendors()->where('vendor_id', $vendor->id)->first();
+
 
             $vendor->open_status = 0;
             $vendor->favorite_status = 0;
@@ -149,15 +150,8 @@ class Vendor extends Model
             if (isset($fav)) {
                 $vendor->favorite_status = 1;
             }
-            if (request()->is_open == 1) {
-                if ($vendor->open_status == 1)
-                    $filteredVendors->push($vendor);
-            } else
-                $filteredVendors->push($vendor);
+
         }
-        return $filteredVendors;
-
+        return $newQuery;
     }
-
-
-    }
+}

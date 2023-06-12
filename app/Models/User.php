@@ -55,7 +55,8 @@ class User extends Authenticatable
     // many to many
     public function favoriteVendors()
     {
-        return $this->belongsToMany(Vendor::class, 'favorite_vendors', 'user_id', 'vendor_id');
+        return $this->belongsToMany(Vendor::class, 'favorite_vendors', 'user_id', 'vendor_id')
+            ->where('is_active', 1);
     }
 
     public function reels()
@@ -67,7 +68,7 @@ class User extends Authenticatable
     // many to many
     public function notifications()
     {
-        return $this->belongsToMany(notification::class, 'user_notification', 'user_id', 'notification_id')
+        return $this->belongsToMany(Notification::class, 'user_notification', 'user_id', 'notification_id')
             ->withPivot(['seen', 'seen_at']);
 
     }
