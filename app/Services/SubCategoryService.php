@@ -36,13 +36,13 @@ class SubCategoryService
     {
         $subCategory = $this->subCategory->create($request->all());
         if ($request->has('image')){
-            $file_name = FileHelper::addFile($request->file('image'),'images/categories');
+            $file_name = FileHelper::addFile($request->file('image'),'images/subcategories');
             $subCategory->image = $file_name;
             $subCategory->save();
         }
 
         if ($request->has('thumbnail')){
-            $file_name = FileHelper::addFile($request->file('thumbnail'),'images/categories');
+            $file_name = FileHelper::addFile($request->file('thumbnail'),'images/subcategories');
             $subCategory->thumbnail = $file_name;
             $subCategory->save();
         }
@@ -56,13 +56,13 @@ class SubCategoryService
         $subCategory = $this->subCategory->findOrFail($request->id);
         $subCategory->update($request->all());
         if ($request->has('image')){
-            $file_name = FileHelper::addFile($request->file('image'),'images/categories');
+            $file_name = FileHelper::addFile($request->file('image'),'images/subcategories');
             $subCategory->image = $file_name;
             $subCategory->save();
         }
 
         if ($request->has('thumbnail')){
-            $file_name = FileHelper::addFile($request->file('thumbnail'),'images/categories');
+            $file_name = FileHelper::addFile($request->file('thumbnail'),'images/subcategories');
             $subCategory->thumbnail = $file_name;
             $subCategory->save();
         }
