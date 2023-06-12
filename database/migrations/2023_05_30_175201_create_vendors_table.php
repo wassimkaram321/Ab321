@@ -21,8 +21,8 @@ class CreateVendorsTable extends Migration
             $table->text('description_ar')->nullable();
             $table->string('image');
             // $table->double('distance')->nullable();
-            $table->time('open')->nullable();
-            $table->time('close')->nullable();
+            // $table->time('open')->nullable();
+            // $table->time('close')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->string('address')->nullable();
@@ -35,10 +35,10 @@ class CreateVendorsTable extends Migration
             $table->date('expire_date')->nullable();
             $table->float('avg_rating', 2, 1)->nullable();
             $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('package_id');
+            $table->unsignedBigInteger('package_id')->nullable();
             $table->integer('visits')->default(0);
             $table->date('custom_date')->default(null);
-            $table->string('webiste')->default(null);
+            $table->string('webiste')->nullable()->default(null);
             $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories');
         });
