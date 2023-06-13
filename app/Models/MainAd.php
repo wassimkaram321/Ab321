@@ -23,5 +23,10 @@ class MainAd extends Model
         static::retrieved(function ($ad) {
             $ad->image = asset('images/mainAds/' . $ad->image);
         });
+        static::updating(function ($ad) {
+            if($ad->image){
+                $ad->image = basename($ad->image);
+            }
+        });
     }
 }

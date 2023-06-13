@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Helpers\FileHelper;
 use App\Models\Reel;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class ReelService
 {
@@ -19,13 +20,15 @@ class ReelService
     {
         $reels = $this->reel->with('vendor:id,name,name_ar,image')->get();
 
-        $user = auth()->user();
-
-        $reelIds = $user->reels->pluck('id')->toArray();
-        foreach ($reels as $reel) {
-            $reel['seen'] = in_array($reel->id, $reelIds) ? 1 : 0;
-            $reel['video'] = asset('images/reels/'.$reel->video);
+        $user = User::where('id', Auth::guard('api')->id())->first();
+        if (isset($user)) {
+            $reelIds = $user->reels->pluck('id')->toArray();
+            foreach ($reels as $reel) {
+                $reel['seen'] = in_array($reel->id, $reelIds) ? 1 : 0;
+                $reel['video'] = asset('images/reels/' . $reel->video);
+            }
         }
+
 
         return $reels->sortBy('seen')->values();
     }
@@ -34,7 +37,6 @@ class ReelService
     public function find($request)
     {
         return $this->reel->app($request->id)->findOrFail($request->id);
-
     }
 
     public function create($request)
@@ -42,7 +44,7 @@ class ReelService
         $reel = $this->reel->create($request->all());
         if ($request->has('video')) {
             $reel->update([
-                'video'=>FileHelper::addFile(request()->file('video'), 'images/reels'),
+                'video' => FileHelper::addFile(request()->file('video'), 'images/reels'),
             ]);
         }
         return $reel;
@@ -55,9 +57,9 @@ class ReelService
         if ($request->has('video')) {
             $video = $reel->video;
             $reel->update([
-                'video'=>FileHelper::addFile(request()->file('video'), 'images/reels'),
+                'video' => FileHelper::addFile(request()->file('video'), 'images/reels'),
             ]);
-            FileHelper::deleteFile($video,'images/reels');
+            FileHelper::deleteFile($video, 'images/reels');
         }
         return $reel;
     }
@@ -66,17 +68,17 @@ class ReelService
     {
 
         $reel = $this->reel->findOrFail($request->id);
-        FileHelper::deleteFile($reel->video,'images/reels');
+        FileHelper::deleteFile($reel->video, 'images/reels');
         $reel->delete();
     }
     public function seenReels($request)
     {
         $ids = $request->ids;
-        $userId = auth()->user()->id;
-        $user = User::findOrFail($userId);
-
-        foreach($ids as $id){
-            $user->reels()->syncWithoutDetaching($id);
+        $user = User::where('id', Auth::guard('api')->id())->first();
+        if (isset($user)) {
+            foreach ($ids as $id) {
+                $user->reels()->syncWithoutDetaching($id);
+            }
         }
     }
 }

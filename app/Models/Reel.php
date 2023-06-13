@@ -23,15 +23,18 @@ class Reel extends Model
 
     public function scopeApp($query,$reelId)
     {
-        // if(request()->video->isValid()){
-        //     $user = auth()->user();
-        //     $user->reels()->sync($reelId);
-        //     return $query;
-        // }
-        // else{
-        //     return $query;
-        // }
         return $query;
+    }
+    public static function booted()
+    {
+        static::retrieved(function ($reel) {
+            $reel->video = asset('images/reels/' . $reel->video);
+        });
+        static::updating(function ($reel) {
+            if($reel->video){
+                $reel->video = basename($reel->video);
+            }
+        });
     }
 
 }

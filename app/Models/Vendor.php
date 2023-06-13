@@ -103,6 +103,9 @@ class Vendor extends Model
         static::updating(function ($model) {
             $model->start_date = date('Y-m-d', strtotime($model->start_date));
             $model->custom_date = date('Y-m-d', strtotime($model->custom_date));
+            if($model->image){
+                $model->image = basename($model->image);
+            }
         });
         static::deleting(function ($vendor) {
             $vendor->subcategories()->detach();

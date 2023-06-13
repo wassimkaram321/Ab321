@@ -30,5 +30,10 @@ class Banner extends Model
         static::retrieved(function ($banner) {
             $banner->image = asset('images/banners' . $banner->image);
         });
+        static::updating(function ($banner) {
+            if($banner->image){
+                $banner->image = basename($banner->image);
+            }
+        });
     }
 }
