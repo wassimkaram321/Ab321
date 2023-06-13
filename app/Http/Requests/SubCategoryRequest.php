@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SubCategoryRequest extends FormRequest
+
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,26 +22,64 @@ class SubCategoryRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+       public function rules()
     {
-        $rules = [
-            "id"=>'sometimes',
-            'name'=>'sometimes',
-            'name_ar'=>'sometimes',
-            'image'=>'sometimes|image',
-            'thumbnail'=>'sometimes|image',
-        ];
-        if($this->isMethod('post')){
-            $rules = [
-                'name'=>'required',
-                'name_ar'=>'required',
-                'image'=>'required|image',
-                'thumbnail'=>'required|image',
-                "id"=>'sometimes',
-                'image'=>'nullable|image',
-                'thumbnail'=>'nullable|image',
-            ];
+        switch ($this->getFunctionName()) {
+            case 'index':
+                return $this->index();
+            case 'store':
+                return $this->store();
+            case 'update':
+                return $this->store();
+            case 'show':
+                return $this->show();
+            case 'destroy':
+                return $this->show();
+            default:
+                return [];
         }
-        return $rules;
+    }
+    public function show()
+    {
+        # code...
+        return [
+            'id' => 'required',
+        ];
+    }
+    public function index()
+    {
+        # code...
+        return [
+        ];
+    }
+    public function store()
+    {
+        # code...
+        return [
+            'name'=>'required',
+            'name_ar'=>'required',
+            'image'=>'required|image',
+            'thumbnail'=>'required|image',
+            "id"=>'sometimes',
+            'image'=>'nullable|image',
+            'thumbnail'=>'nullable|image',
+        ];
+    }
+    public function update()
+    {
+        return [
+            "id"=>'required',
+            'name'=>'required',
+            'name_ar'=>'required',
+            'image'=>'nullable|image',
+            'thumbnail'=>'nullable|image',
+        ];
+    }
+    public function getFunctionName(): string
+    {
+        $action = $this->route()->getAction();
+        $controllerAction = $action['controller'];
+        list($controller, $method) = explode('@', $controllerAction);
+        return $method;
     }
 }
