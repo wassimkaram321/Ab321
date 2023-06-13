@@ -72,4 +72,15 @@ class User extends Authenticatable
             ->withPivot(['seen', 'seen_at']);
 
     }
+    public static function booted()
+    {
+        static::retrieved(function ($user) {
+            $user->avatar = asset('images/users/' . $user->avatar);
+        });
+        static::updating(function ($user) {
+            if($user->avatar){
+                $user->avatar = basename($user->avatar);
+            }
+        });
+    }
 }

@@ -50,6 +50,11 @@ class Category extends Model
             $category->image = asset('images/categories/'.$category->image);
             $category->thumbnail = asset('images/categories/'.$category->thumbnail);
         });
+        static::updating(function ($category) {
+            if($category->image){
+                $category->image = basename($category->image);
+            }
+        });
     }
 
 }

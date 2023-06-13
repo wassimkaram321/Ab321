@@ -34,5 +34,13 @@ class SubCategory extends Model
             $subcategory->image = asset('images/subcategories/' . $subcategory->image);
             $subcategory->thumbnail = asset('images/subcategories/' . $subcategory->thumbnail);
         });
+        static::updating(function ($subcategory) {
+            if($subcategory->image){
+                $subcategory->image = basename($subcategory->image);
+            }
+            if($subcategory->thumbnail){
+                $subcategory->thumbnail = basename($subcategory->thumbnail);
+            }
+        });
     }
 }
