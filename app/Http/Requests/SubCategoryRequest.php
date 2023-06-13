@@ -73,6 +73,7 @@ class SubCategoryRequest extends FormRequest
             'name_ar'=>'required',
             'image'=>'image',
             'thumbnail'=>'image',
+
         ];
     }
     public function getFunctionName(): string
