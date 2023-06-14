@@ -71,8 +71,9 @@ class SubCategoryRequest extends FormRequest
             "id"=>'required',
             'name'=>'required',
             'name_ar'=>'required',
-            'image'=>'nullable|image',
-            'thumbnail'=>'nullable|image',
+            'image'=>'image',
+            'thumbnail'=>'image',
+
         ];
     }
     public function getFunctionName(): string

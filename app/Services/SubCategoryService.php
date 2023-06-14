@@ -54,8 +54,10 @@ class SubCategoryService
     public function update($request)
     {
         $subCategory = $this->subCategory->findOrFail($request->id);
+
         $subCategory->update($request->all());
-        if ($request->has('image')) {
+
+        if ($request->file('image')){
             $image = $subCategory->image;
             $file_name = FileHelper::addFile($request->file('image'), 'images/subcategories');
             FileHelper::deleteFile($image, 'images/subcategories');
@@ -63,15 +65,15 @@ class SubCategoryService
             $subCategory->save();
         }
 
-        if ($request->has('thumbnail')) {
+
+        if ($request->file('thumbnail')){
             $thumbnail = $subCategory->thumbnail;
             $file_name = FileHelper::addFile($request->file('thumbnail'), 'images/subcategories');
             FileHelper::deleteFile($thumbnail, 'images/subcategories');
             $subCategory->thumbnail = $file_name;
             $subCategory->save();
         }
-
-        // $this->addImage($subCategory,$request->file('image') , $request->file('thumbnail'));
+        
         return $subCategory;
     }
 

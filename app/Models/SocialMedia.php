@@ -24,6 +24,14 @@ class SocialMedia extends Model
         static::deleting(function ($socialMedia) {
             $socialMedia->vendors()->detach();
         });
+        static::retrieved(function ($socialMedia) {
+            $socialMedia->image = asset('images/socialMedia/' . $socialMedia->image);
+        });
+        static::updating(function ($socialMedia) {
+            if($socialMedia->image){
+                $socialMedia->image = basename($socialMedia->image);
+            }
+        });
     }
 
 }
