@@ -16,7 +16,7 @@ class MainAdService
 
     public function all($request)
     {
-        return $this->mainAd->orderByRaw("FIELD(priority, 'high', 'medium', 'low')")->get();
+        return $this->mainAd->orderByRaw("FIELD(priority, 'high', 'medium', 'low')")->active()->get();
     }
 
     public function find($request)

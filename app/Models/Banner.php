@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,5 +36,16 @@ class Banner extends Model
                 $banner->image = basename($banner->image);
             }
         });
+    }
+    public function scopeActive($query)
+    {
+        $date = date('Y-m-d');
+
+        if (request()->is_active == 1) {
+            return $query->where('start_date', '<=', $date)
+                ->where('end_date', '>=', $date);
+        } else {
+            return $query;
+        }
     }
 }
