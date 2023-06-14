@@ -17,10 +17,10 @@ class SubCategoryService
 
     public function all($request = null)
     {
-        if($request){
-            if($request->has('category_id')){
-                $category = Category::with(['ads','subCategories'])->findOrFail($request->category_id);
-                return ['subcategoris'=>$category->subCategories,'ads'=> $category->ads];
+        if ($request) {
+            if ($request->has('category_id')) {
+                $category = Category::with(['ads', 'subCategories'])->findOrFail($request->category_id);
+                return ['subcategoris' => $category->subCategories, 'ads' => $category->ads];
             }
         }
 
@@ -35,14 +35,14 @@ class SubCategoryService
     public function create($request)
     {
         $subCategory = $this->subCategory->create($request->all());
-        if ($request->has('image')){
-            $file_name = FileHelper::addFile($request->file('image'),'images/subcategories');
+        if ($request->has('image')) {
+            $file_name = FileHelper::addFile($request->file('image'), 'images/subcategories');
             $subCategory->image = $file_name;
             $subCategory->save();
         }
 
-        if ($request->has('thumbnail')){
-            $file_name = FileHelper::addFile($request->file('thumbnail'),'images/subcategories');
+        if ($request->has('thumbnail')) {
+            $file_name = FileHelper::addFile($request->file('thumbnail'), 'images/subcategories');
             $subCategory->thumbnail = $file_name;
             $subCategory->save();
         }
@@ -55,18 +55,18 @@ class SubCategoryService
     {
         $subCategory = $this->subCategory->findOrFail($request->id);
         $subCategory->update($request->all());
-        if ($request->has('image')){
+        if ($request->has('image')) {
             $image = $subCategory->image;
-            $file_name = FileHelper::addFile($request->file('image'),'images/subcategories');
-            FileHelper::deleteFile($image,'images/subcategories');
+            $file_name = FileHelper::addFile($request->file('image'), 'images/subcategories');
+            FileHelper::deleteFile($image, 'images/subcategories');
             $subCategory->image = $file_name;
             $subCategory->save();
         }
 
-        if ($request->has('thumbnail')){
+        if ($request->has('thumbnail')) {
             $thumbnail = $subCategory->thumbnail;
-            $file_name = FileHelper::addFile($request->file('thumbnail'),'images/subcategories');
-            FileHelper::deleteFile($thumbnail,'images/subcategories');
+            $file_name = FileHelper::addFile($request->file('thumbnail'), 'images/subcategories');
+            FileHelper::deleteFile($thumbnail, 'images/subcategories');
             $subCategory->thumbnail = $file_name;
             $subCategory->save();
         }
@@ -78,11 +78,11 @@ class SubCategoryService
     public function delete($request)
     {
         $subCategory = $this->subCategory->findOrFail($request->id);
-        FileHelper::deleteFile($subCategory->image,'images/subcategories');
-        FileHelper::deleteFile($subCategory->thumbnail,'images/subcategories');
+        FileHelper::deleteFile($subCategory->image, 'images/subcategories');
+        FileHelper::deleteFile($subCategory->thumbnail, 'images/subcategories');
         $subCategory->delete();
     }
-    public function addImage($subCategory , $image , $thumbnail)
+    public function addImage($subCategory, $image, $thumbnail)
     {
         $subCategory->image = $image->getClientOriginalName();
         $subCategory->thumbnail = $thumbnail->getClientOriginalName();
