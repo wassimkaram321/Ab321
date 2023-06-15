@@ -172,5 +172,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('notification-seeAll',      [NotificationController::class, 'seeAll']);
     Route::get('notification-unseen-count', [NotificationController::class, 'unseenCount']);
     Route::post('notification-enable',      [UserController::class, 'changeEnableNotification']);
+    Route::get('days',      [MainController::class, 'days']);
 
 });
