@@ -29,7 +29,8 @@ class Banner extends Model
     public static function booted()
     {
         static::retrieved(function ($banner) {
-            $banner->image = asset('images/banners/' . $banner->image);
+            if(isset($banner->image))
+                $banner->image = asset('images/banners/' . $banner->image);
         });
         static::updating(function ($banner) {
             if($banner->image){

@@ -47,8 +47,10 @@ class Category extends Model
     {
 
         static::retrieved(function ($category) {
-            $category->image = asset('images/categories/'.$category->image);
-            $category->thumbnail = asset('images/categories/'.$category->thumbnail);
+            if(isset($category->image))
+                $category->image = asset('images/categories/'.$category->image);
+            if(isset($category->thumbnail))
+                $category->thumbnail = asset('images/categories/'.$category->thumbnail);
         });
         static::updating(function ($category) {
             if($category->image){

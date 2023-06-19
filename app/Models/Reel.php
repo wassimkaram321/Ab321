@@ -28,7 +28,8 @@ class Reel extends Model
     public static function booted()
     {
         static::retrieved(function ($reel) {
-            $reel->video = asset('images/reels/' . $reel->video);
+            if(isset($reel->video))
+                $reel->video = asset('images/reels/' . $reel->video);
         });
         static::updating(function ($reel) {
             if($reel->video){

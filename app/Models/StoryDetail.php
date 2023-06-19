@@ -50,8 +50,10 @@ class StoryDetail extends Model
             }
         });
         static::retrieved(function ($storyDetail) {
-            $storyDetail->video = asset('images/stories/' . $storyDetail->video);
-            $storyDetail->image = asset('images/stories/' . $storyDetail->image);
+            if(isset($storyDetail->video))
+                $storyDetail->video = asset('images/stories/' . $storyDetail->video);
+            if(isset($storyDetail->image))
+                $storyDetail->image = asset('images/stories/' . $storyDetail->image);
         });
 
     }

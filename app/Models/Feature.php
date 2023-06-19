@@ -12,6 +12,7 @@ class Feature extends Model
     protected $fillable = [
         'name',
         'name_ar',
+        'icon',
         'package_id',
     ];
     public function package()
@@ -25,7 +26,8 @@ class Feature extends Model
     public static function booted()
     {
         static::retrieved(function ($feature) {
-            $feature->icon = asset('images/features/' . $feature->icon);
+            if(isset($feature->icon))
+                $feature->icon = asset('images/features/' . $feature->icon);
         });
         static::updating(function ($feature) {
             if($feature->icon){

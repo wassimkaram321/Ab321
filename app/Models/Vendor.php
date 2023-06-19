@@ -117,7 +117,8 @@ class Vendor extends Model
         });
 
         static::retrieved(function ($vendor) {
-            $vendor->image = asset('images/vendors/' . $vendor->image);
+            if(isset($vendor->image))
+                $vendor->image = asset('images/vendors/' . $vendor->image);
         });
     }
     public function incrementVisits()

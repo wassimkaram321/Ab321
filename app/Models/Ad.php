@@ -33,7 +33,8 @@ class Ad extends Model
     public static function booted()
     {
         static::retrieved(function ($ad) {
-            $ad->image = asset('images/categoryAds/' . $ad->image);
+            if(isset($ad->image))
+                $ad->image = asset('images/categoryAds/' . $ad->image);
         });
         static::updating(function ($ad) {
             if ($ad->image) {

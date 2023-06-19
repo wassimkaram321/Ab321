@@ -22,7 +22,8 @@ class MainAd extends Model
     public static function booted()
     {
         static::retrieved(function ($ad) {
-            $ad->image = asset('images/mainAds/' . $ad->image);
+            if(isset($ad->image))
+                $ad->image = asset('images/mainAds/' . $ad->image);
         });
         static::updating(function ($ad) {
             if($ad->image){
