@@ -16,7 +16,10 @@ class FeatureService
 
     public function all($request)
     {
-        return $this->feature->with('package')->get();
+        if (isset($request->package_id))
+            return $this->feature->where('package_id', $request->package_id)->with('package')->get();
+        else
+            return $this->feature->with('package')->get();
     }
 
     public function find($request)
@@ -32,6 +35,7 @@ class FeatureService
             $feature->icon = $icon;
             $feature->save();
         }
+        return $feature;
     }
 
     public function update($request)
