@@ -33,17 +33,6 @@ class VendorService
 
     public function find($request)
     {
-
-        // return $this->vendor
-        //     ->with([
-        //         'days', 'category', 'subCategories', 'socialMedia', 'features',
-        //         'banners' => function ($query) {
-        //             $query->orderByRaw("FIELD(priority, 'high', 'medium', 'low')")->active();
-        //         }
-        //     ])
-        //     ->withCount('favoriteUsers')
-        //     ->app()
-        //     ->where('id', $request->id);
         $vendor = $this->vendor
             ->with([
                 'days', 'category', 'subCategories', 'socialMedia', 'features',
