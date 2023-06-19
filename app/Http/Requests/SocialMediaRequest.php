@@ -29,7 +29,7 @@ class SocialMediaRequest extends FormRequest
             case 'store':
                 return $this->store();
             case 'update':
-                return $this->store();
+                return $this->update();
             case 'show':
                 return $this->show();
             case 'destroy':
@@ -62,7 +62,7 @@ class SocialMediaRequest extends FormRequest
         return [
             'name'    => 'required',
             'name_ar' => 'nullable',
-            'image'   => 'required',
+            'image'   => 'nullable',
         ];
     }
     public function getFunctionName(): string
