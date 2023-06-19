@@ -17,6 +17,7 @@ class CreateFeaturesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('name_ar');
+            $table->string('icon')->nullable();
             $table->unsignedBigInteger('package_id');
             $table->foreign('package_id')->references('id')->on('packages');
             $table->timestamps();

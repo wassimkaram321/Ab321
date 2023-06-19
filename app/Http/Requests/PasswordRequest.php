@@ -36,6 +36,8 @@ class PasswordRequest extends FormRequest
                 return $this->show();
             case 'resetPassword':
                 return $this->resetPassword();
+            case 'resetOtpPassword':
+                return $this->resetOtpPassword();
             default:
                 return [];
         }
@@ -72,6 +74,15 @@ class PasswordRequest extends FormRequest
 
         return [
             'old_password'=>'required',
+            'password' => 'required',
+            'confirm_password' => 'required|same:password',
+        ];
+    }
+    public function resetOtpPassword()
+    {
+
+        return [
+            'phone'=>'required',
             'password' => 'required',
             'confirm_password' => 'required|same:password',
         ];

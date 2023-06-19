@@ -49,6 +49,12 @@ class StoryDetail extends Model
                 $storyDetail->video = $videoPath;
             }
         });
+        static::retrieved(function ($storyDetail) {
+            if(isset($storyDetail->video))
+                $storyDetail->video = asset('images/stories/' . $storyDetail->video);
+            if(isset($storyDetail->image))
+                $storyDetail->image = asset('images/stories/' . $storyDetail->image);
+        });
 
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,13 +33,24 @@ class Ad extends Model
     public static function booted()
     {
         static::retrieved(function ($ad) {
-            $ad->image = asset('images/categoryAds' . $ad->image);
+            if(isset($ad->image))
+                $ad->image = asset('images/categoryAds/' . $ad->image);
         });
         static::updating(function ($ad) {
-            if($ad->image){
+            if ($ad->image) {
                 $ad->image = basename($ad->image);
             }
         });
     }
+    public function scopeActive($query)
+    {
+        $date = date('Y-m-d');
 
+        if (request()->is_active == 1) {
+            return $query->where('start_date', '<=', $date)
+                ->where('end_date', '>=', $date);
+        } else {
+            return $query;
+        }
+    }
 }

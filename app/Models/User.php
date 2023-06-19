@@ -75,7 +75,8 @@ class User extends Authenticatable
     public static function booted()
     {
         static::retrieved(function ($user) {
-            $user->avatar = asset('images/users/' . $user->avatar);
+            if(isset($user->avatar))
+                $user->avatar = asset('images/users/' . $user->avatar);
         });
         static::updating(function ($user) {
             if($user->avatar){

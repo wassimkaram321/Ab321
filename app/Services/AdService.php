@@ -16,7 +16,8 @@ class AdService
 
     public function all($request)
     {
-        return $this->ad->with('category')->orderByRaw("FIELD(priority, 'high', 'medium', 'low')")->get();
+        return $this->ad->with('category')->orderByRaw("FIELD(priority, 'high', 'medium', 'low')")->active()->get();
+
     }
 
     public function find($request)

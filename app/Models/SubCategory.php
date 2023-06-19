@@ -31,7 +31,9 @@ class SubCategory extends Model
             $subcategory->vendors()->detach();
         });
         static::retrieved(function ($subcategory) {
-            $subcategory->image = asset('images/subcategories/' . $subcategory->image);
+            if(isset($subcategory->image))
+                $subcategory->image = asset('images/subcategories/' . $subcategory->image);
+            if(isset($subcategory->thumbnail))
             $subcategory->thumbnail = asset('images/subcategories/' . $subcategory->thumbnail);
         });
         static::updating(function ($subcategory) {

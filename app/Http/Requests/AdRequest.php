@@ -29,7 +29,7 @@ class AdRequest extends FormRequest
             case 'store':
                 return $this->store();
             case 'update':
-                return $this->store();
+                return $this->update();
             case 'show':
                 return $this->show();
             case 'destroy':
@@ -64,7 +64,7 @@ class AdRequest extends FormRequest
             'priority'    => 'required',
             'url'         => 'required',
             'is_active'   => 'required',
-            'image'       => 'required',
+            'image'       => 'required|image',
         ];
     }
     public function update()
