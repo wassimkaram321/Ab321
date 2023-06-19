@@ -29,7 +29,7 @@ class BannerRequest extends FormRequest
             case 'store':
                 return $this->store();
             case 'update':
-                return $this->store();
+                return $this->update();
             case 'show':
                 return $this->show();
             case 'destroy':

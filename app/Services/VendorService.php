@@ -33,15 +33,44 @@ class VendorService
 
     public function find($request)
     {
-        return $this->vendor
-        ->with(['days', 'category', 'subCategories', 'socialMedia', 'features',
+
+        // return $this->vendor
+        //     ->with([
+        //         'days', 'category', 'subCategories', 'socialMedia', 'features',
+        //         'banners' => function ($query) {
+        //             $query->orderByRaw("FIELD(priority, 'high', 'medium', 'low')")->active();
+        //         }
+        //     ])
+        //     ->withCount('favoriteUsers')
+        //     ->app()
+        //     ->where('id', $request->id);
+        $vendor = $this->vendor
+            ->with([
+                'days', 'category', 'subCategories', 'socialMedia', 'features',
                 'banners' => function ($query) {
                     $query->orderByRaw("FIELD(priority, 'high', 'medium', 'low')")->active();
                 }
-        ])
-        ->withCount('favoriteUsers')
-        ->app()
-        ->where('id', $request->id);
+            ])
+            ->withCount('favoriteUsers')
+            ->app()
+            ->where('id', $request->id)
+            ->first();
+
+        $result = [
+            'vendor' => $vendor,
+            'recomindation'=>[]
+        ];
+
+        if ($request->recomindation == 1) {
+            $recomindation = $this->recomendation($request);
+            $recomindationArray = $recomindation->toArray();
+            $reindexedRecomindation = array_values($recomindationArray);
+            $result['recomindation'] = $reindexedRecomindation;
+        }
+
+        $mergedData = array_merge($result['vendor']->toArray(), ['recomindation' => $result['recomindation']]);
+
+        return $mergedData;
     }
 
     public function create($request)
@@ -276,7 +305,8 @@ class VendorService
                     ->whereIn('sub_category_id', $subcategories->pluck('id'));
             })
             ->orderByDesc('visits')
-            ->take(5);
+            ->take(5)
+            ->get();
 
         return $vendors;
     }

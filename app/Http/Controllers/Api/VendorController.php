@@ -62,9 +62,6 @@ class VendorController extends Controller
     public function show(VendorRequest $request)
     {
         $data = $this->vendorServices->find($request);
-        if ($request->recomindation == 1) {
-            $data['recomindation'] = $this->vendorServices->recomendation($request);
-        }
         return $this->success($data, 'success');
     }
 

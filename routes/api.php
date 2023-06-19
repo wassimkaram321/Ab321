@@ -81,13 +81,18 @@ Route::get('about', [AboutController::class,'show']);
 Route::get('privacy', [PrivacyController::class,'show']);
 
 Route::get('home', [MainController::class, 'home']);
+Route::post('logout', [AuthController::class, 'logout']);
 
+Route::post('forget-password-generate-otp', [AuthController::class, 'forgetPassword']);
+Route::post('forget-password', [AuthController::class, 'resetOtpPassword']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
-    Route::post('logout', [AuthController::class, 'logout']);
-
     Route::post('reset-password', [AuthController::class, 'resetPassword']);
+
+    Route::post('update-profile',   [AuthController::class, 'updateProfile']);
+
+
     Route::post('create-device-token', [AuthController::class, 'createDeviceToken']);
     Route::post('delete-device-token', [AuthController::class, 'deleteDeviceToken']);
     Route::get('profile', [AuthController::class, 'userProfile']);
@@ -173,5 +178,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('notification-unseen-count', [NotificationController::class, 'unseenCount']);
     Route::post('notification-enable',      [UserController::class, 'changeEnableNotification']);
     Route::get('days',      [MainController::class, 'days']);
+    Route::get('social-media',      [SocialMediaController::class, 'index']);
 
 });
