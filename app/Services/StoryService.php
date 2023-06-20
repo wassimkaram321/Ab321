@@ -24,7 +24,7 @@ class StoryService
                 $query->with('storyDetails');
             }
         ])
-        ->get();
+        ->first();
     }
     public function getAll($request)
     {

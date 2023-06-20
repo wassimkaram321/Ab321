@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\{
     ReelController,
     SocialMediaController,
     StoryController,
+    StoryDetailsController,
     SubCategoryController,
     UserController,
     VendorController,
@@ -129,6 +130,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('story_add',   [StoryController::class, 'store']);
     Route::post('story_update', [StoryController::class, 'update']);
     Route::post('story_delete', [StoryController::class, 'destroy']);
+    Route::post('story_details_delete', [StoryDetailsController::class, 'destroy']);
     Route::post('seen_stories', [StoryController::class, 'seenStories']);
 
     Route::post('make-review',   [ReviewController::class, 'makeRealestateReview']);
