@@ -63,6 +63,8 @@ Route::get('features', [FeatureController::class, 'index']);
 Route::get('feature',  [FeatureController::class, 'show']);
 
 Route::get('stories', [StoryController::class, 'index']);
+Route::get('all_stories', [StoryController::class, 'all']);
+Route::get('story_view_edit', [StoryController::class, 'updateViews']);
 Route::get('story',   [StoryController::class, 'show']);
 
 Route::get('vendor-reviews', [ReviewController::class, 'RealestateReviews']);

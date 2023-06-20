@@ -28,7 +28,13 @@ class StoryService
     }
     public function getAll($request)
     {
-       return $this->story->with('vendor')->get();
+        return Vendor::
+        with([
+            'stories' => function ($query) {
+                $query->with('storyDetails');
+            }
+        ])
+        ->get();
     }
 
     public function find($request)
@@ -76,5 +82,11 @@ class StoryService
         foreach($ids as $id){
             $user->stories()->syncWithoutDetaching($id);
         }
+    }
+    public function updateViews($request)
+    {
+       return $this->story->findOrFail($request->id)->update([
+        'views'=>$request->views,
+       ]);
     }
 }
