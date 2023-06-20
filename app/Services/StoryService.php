@@ -24,10 +24,13 @@ class StoryService
                 $query->with('storyDetails');
             }
         ])
-        ->first();
+        ->get(['name','name_ar'])->first();
     }
     public function getAll($request)
     {
+        if($request->has('id')){
+            return $this->story->findOrFail($request->id)->with('storyDetails')->get();
+        }
         return Vendor::
         with([
             'stories' => function ($query) {
@@ -36,6 +39,12 @@ class StoryService
         ])
         ->get();
     }
+    public function getAllApi($request)
+    {
+
+       return $this->story->get();
+    }
+
 
     public function find($request)
     {

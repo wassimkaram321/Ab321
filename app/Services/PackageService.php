@@ -52,10 +52,10 @@ class PackageService
        $vendor = Vendor::findOrFail($request->vendor_id);
        $features = $request->features;
        foreach($features as $feature){
-        $feature_icon = FileHelper::addFile($feature['icon'],'images/features');
+
         $vendor->features()->attach(
             $feature['feature_id'],
-            ['content' => $feature['content'],'icon'=>$feature_icon]
+            ['content' => $feature['content']]
         );
        }
        return $vendor->with('features');

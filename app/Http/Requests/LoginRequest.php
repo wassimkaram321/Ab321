@@ -56,7 +56,7 @@ class LoginRequest extends FormRequest
         # code...
         return [
             'email' => 'sometimes|exists:users,email',
-            'phone' => 'sometimes|unique:users,phone',
+            'phone' => 'sometimes|exists:users,phone',
             'password' => 'required',
         ];
     }

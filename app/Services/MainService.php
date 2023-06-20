@@ -16,7 +16,7 @@ class MainService
 
     public function home($request)
     {
-        $stories = (new StoryService)->getAll($request);
+        $stories = (new StoryService)->getAllApi($request);
         $mainAds = (new MainAdService)->all($request);
         $categories = (new CategoryService)->allWithOut($request);
         $data = [

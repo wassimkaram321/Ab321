@@ -17,7 +17,10 @@ class ReviewService
 
     public function vendorReviews($request)
     {
-        $vendor_reviews = Vendor::findOrFail($request->id)->reviews()->get();
+        if($request->has('id'))
+            $vendor_reviews = Vendor::findOrFail($request->id)->reviews()->get();
+        else
+            $vendor_reviews = Vendor::with('reviews')->get();
         return $vendor_reviews;
     }
     public function makeReview($request)
