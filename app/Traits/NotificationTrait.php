@@ -8,7 +8,7 @@ trait NotificationTrait
     public function send_notification($device_token, $title, $body)
     {
         $url = 'https://fcm.googleapis.com/fcm/send';
-        $SERVER_API_KEY = 'AAAA5V8ucPA:APA91bExq4dR3etNNGakbSX4OWplIF0czdxFFwmCk16FeoAxvtLkVAId2lF-BHU_wqBeZMJXV0fpER7Q964i1MW3KHUawkcO1GFKHl0xT0YTxwZ9voTNGDHp-AhbykYAkChwfmsDiDQE';
+        $SERVER_API_KEY = 'AAAAI46Pfms:APA91bFnmvVFQ5tWOQklZDLL2V078BNL6QQNayvjl30vM4YbUYoUiIpxHc353jmoby8sD4lB-TtLA1ycNOUq5HtugwlGWEXQ7-fqI0hF8jPvuDjbSIfZAzCgALT6PnolEYzZEKOMI6EY';
         $data = [
             'to' => $device_token, //$FcmToken,
             'notification' => [

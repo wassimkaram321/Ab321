@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\{
     AdController,
     AuthController,
     BannerController,
+    BlogController,
     CategoryController,
     FeatureController,
     MainAdController,
@@ -193,5 +194,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('social-media-store',    [SocialMediaController::class, 'store']);
     Route::post('social-media-update',   [SocialMediaController::class, 'update']);
     Route::delete('social-media-delete', [SocialMediaController::class, 'destroy']);
+
+    Route::get('blogs', [BlogController::class, 'index']);
+    Route::get('blog', [BlogController::class, 'show']);
+    Route::post('blog-add', [BlogController::class, 'store']);
+    Route::post('blog-update', [BlogController::class, 'update']);
+    Route::post('blog-delete', [BlogController::class, 'destroy']);
 
 });

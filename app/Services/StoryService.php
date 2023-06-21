@@ -85,7 +85,7 @@ class StoryService
         $userId = auth()->user()->id;
         $user = User::findOrFail($userId);
         foreach($ids as $id){
-            DB::table('story_user')->insert([
+            DB::table('story_user')->updateOrInsert([
                 'story_id'=>$id,
                 'user_id'=>$userId,
             ]);

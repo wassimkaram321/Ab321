@@ -145,6 +145,9 @@ class Vendor extends Model
         })
         ->when(request()->sort_by_name == 0, function ($query) {
             return $query->orderBy('name', 'desc');
+        })
+        ->when(request()->visits == 1, function ($query) {
+            return $query->orderBy('visits', 'desc');
         });
 
         if (request()->has('skip_count') && request()->has('max_count')) {
