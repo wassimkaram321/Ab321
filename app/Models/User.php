@@ -49,7 +49,7 @@ class User extends Authenticatable
     ];
     public function stories()
     {
-        return $this->belongsToMany(Story::class, 'story_user');
+        return $this->belongsToMany(Story::class, 'story_user','story_id','user_id');
     }
 
     // many to many

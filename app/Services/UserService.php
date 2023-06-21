@@ -62,6 +62,7 @@ class UserService
     {
         $user = $this->user->findOrFail(Auth::id());
         $userFavoriteVendorIds = $user->favoriteVendors()->pluck('vendor_id');
+        
         $favoriteVendors = Vendor::whereIn('id', $userFavoriteVendorIds)->app();
         return $favoriteVendors;
     }

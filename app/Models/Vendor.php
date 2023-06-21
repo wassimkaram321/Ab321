@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Digikraaft\ReviewRating\Traits\HasReviewRating;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -103,7 +104,7 @@ class Vendor extends Model
         static::updating(function ($model) {
             $model->start_date = date('Y-m-d', strtotime($model->start_date));
             $model->custom_date = date('Y-m-d', strtotime($model->custom_date));
-            if($model->image){
+            if ($model->image) {
                 $model->image = basename($model->image);
             }
         });
@@ -117,7 +118,7 @@ class Vendor extends Model
         });
 
         static::retrieved(function ($vendor) {
-            if(isset($vendor->image))
+            if (isset($vendor->image))
                 $vendor->image = asset('images/vendors/' . $vendor->image);
         });
     }
@@ -128,17 +129,44 @@ class Vendor extends Model
 
     public function scopeApp($query)
     {
-        if (request()->is_active == 1) {
-            $newQuery = $query->where('is_active', 1)->get();
-        } else {
-            $newQuery = $query->get();
+        $newQuery = $query;
+
+        $newQuery = $newQuery->when(request()->is_active == 1, function ($query) {
+            return $query->where('is_active', 1);
+        })
+        ->when(request()->recent == 1, function ($query) {
+            return $query->orderBy('created_at', 'asc');
+        })
+        ->when(request()->recent == 0, function ($query) {
+            return $query->orderBy('created_at', 'desc');
+        })
+        ->when(request()->sort_by_name == 1, function ($query) {
+            return $query->orderBy('name', 'asc');
+        })
+        ->when(request()->sort_by_name == 0, function ($query) {
+            return $query->orderBy('name', 'desc');
+        });
+
+        if (request()->has('skip_count') && request()->has('max_count')) {
+            $skipCount = request()->skip_count;
+            $maxCount = request()->max_count;
+            $newQuery = $newQuery->skip($skipCount)->take($maxCount);
         }
+
+        $newQuery = $newQuery->get();
+
 
         $currentDay = Carbon::now()->format('l');
         $currentTime = Carbon::now()->format('H:i:s');
         $day = Day::where('name', $currentDay)->first();
-        $user = User::where('id', Auth::guard('api')->id())->first();
 
+
+
+        if (auth()->check()) {
+            $user = User::where('id', auth()->user()->id)->first();
+        } else {
+            $user = User::where('id', Auth::guard('api')->id())->first();
+        }
         foreach ($newQuery as $vendor) {
             $qDay = $vendor->days()->where('day_id', $day->id)->first();
 

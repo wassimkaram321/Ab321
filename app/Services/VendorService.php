@@ -262,17 +262,17 @@ class VendorService
                 });
             }
             if ($request->has('category_id')) {
-                $query->where('category_id', $request->category_id);
+                $query->orWhere('category_id', $request->category_id);
             }
 
             if ($request->has('features')) {
                 $features = $request->features;
                 $query->whereHas('features', function ($query) use ($features) {
-                    $query->whereIn('features.id', $features);
+                    $query->orWhereIn('features.id', $features);
                 });
             }
             if ($request->has('rate')) {
-                $query->where('avg_rating', $request->rate);
+                $query->orWhere('avg_rating', $request->rate);
             }
             if ($request->has('latitude') && $request->has('longitude')) {
                 $latitude = $request->latitude;
@@ -281,6 +281,7 @@ class VendorService
 
                 $query->whereRaw('ST_Distance_Sphere(point(longitude, latitude), point(?, ?)) <= ?', [$longitude, $latitude, $radius * 1000]);
             }
+           
         });
         return $query;
     }

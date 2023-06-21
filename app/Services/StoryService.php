@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Story;
 use App\Models\User;
 use App\Models\Vendor;
+use Illuminate\Support\Facades\DB;
 
 class StoryService
 {
@@ -29,15 +30,10 @@ class StoryService
     public function getAll($request)
     {
         if($request->has('id')){
-            return $this->story->findOrFail($request->id)->with('storyDetails')->get();
+            $story = $this->story->findOrFail($request->id);
+            return $story->storyDetails;
         }
-        return Vendor::
-        with([
-            'stories' => function ($query) {
-                $query->with('storyDetails');
-            }
-        ])
-        ->get();
+        return $this->story->with(['storyDetails','vendor:id,name,name_ar'])->withCount('storyDetails')->get();
     }
     public function getAllApi($request)
     {
@@ -89,7 +85,10 @@ class StoryService
         $userId = auth()->user()->id;
         $user = User::findOrFail($userId);
         foreach($ids as $id){
-            $user->stories()->syncWithoutDetaching($id);
+            DB::table('story_user')->insert([
+                'story_id'=>$id,
+                'user_id'=>$userId,
+            ]);
         }
     }
     public function updateViews($request)
