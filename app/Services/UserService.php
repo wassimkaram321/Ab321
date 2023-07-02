@@ -62,13 +62,16 @@ class UserService
     {
         $user = $this->user->findOrFail(Auth::id());
         $userFavoriteVendorIds = $user->favoriteVendors()->pluck('vendor_id');
-        
         $favoriteVendors = Vendor::whereIn('id', $userFavoriteVendorIds)->app();
         return $favoriteVendors;
     }
     public function getNearbyVendors($request)
     {
-        $user = $this->user->findOrFail(Auth::id());
+       if (auth()->check()) {
+            $user = User::where('id', auth()->user()->id)->first();
+        } else {
+            $user = User::where('id', Auth::guard('api')->id())->first();
+        }
         $vendors = Vendor::with('category')->where('is_active', 1)->app();
         $nearby = collect();
         foreach ($vendors as $vendor) {

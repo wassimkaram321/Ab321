@@ -150,7 +150,7 @@ class Vendor extends Model
             return $query->orderBy('visits', 'desc');
         });
 
-        if (request()->has('skip_count') && request()->has('max_count')) {
+        if (request()->skip_count != null && request()->max_count != null) {
             $skipCount = request()->skip_count;
             $maxCount = request()->max_count;
             $newQuery = $newQuery->skip($skipCount)->take($maxCount);
@@ -164,12 +164,12 @@ class Vendor extends Model
         $day = Day::where('name', $currentDay)->first();
 
 
-
         if (auth()->check()) {
             $user = User::where('id', auth()->user()->id)->first();
         } else {
             $user = User::where('id', Auth::guard('api')->id())->first();
         }
+
         foreach ($newQuery as $vendor) {
             $qDay = $vendor->days()->where('day_id', $day->id)->first();
 

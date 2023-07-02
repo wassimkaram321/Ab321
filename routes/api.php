@@ -7,7 +7,6 @@ use App\Http\Controllers\Api\{
     AdController,
     AuthController,
     BannerController,
-    BlogController,
     CategoryController,
     FeatureController,
     MainAdController,
@@ -91,7 +90,13 @@ Route::post('logout', [AuthController::class, 'logout']);
 Route::post('forget-password-generate-otp', [AuthController::class, 'forgetPassword']);
 Route::post('forget-password', [AuthController::class, 'resetOtpPassword']);
 
+Route::get('nearby-vendors',   [UserController::class, 'getNearbyVendors']);
+
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    // Route::get('vendors', [VendorController::class, 'index']);
+
+
 
     Route::post('reset-password', [AuthController::class, 'resetPassword']);
 
@@ -116,7 +121,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('vendor_update', [VendorController::class, 'update']);
     Route::post('vendor_delete', [VendorController::class, 'destroy']);
     Route::post('vendor_status', [VendorController::class, 'changeStatus']);
-    Route::post('nearby-vendors',   [UserController::class, 'getNearbyVendors']);
 
 
     Route::post('package_add', [PackageController::class, 'store']);
@@ -176,7 +180,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('privacy-update', [PrivacyController::class,'update']);
 
-    Route::post('nearby-vendors', [UserController::class, 'getNearbyVendors']);
 
     Route::get('notifications',             [NotificationController::class, 'index']);
     Route::post('notification-send',        [NotificationController::class, 'store']);
@@ -194,11 +197,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('social-media-store',    [SocialMediaController::class, 'store']);
     Route::post('social-media-update',   [SocialMediaController::class, 'update']);
     Route::delete('social-media-delete', [SocialMediaController::class, 'destroy']);
-
-    Route::get('blogs', [BlogController::class, 'index']);
-    Route::get('blog', [BlogController::class, 'show']);
-    Route::post('blog-add', [BlogController::class, 'store']);
-    Route::post('blog-update', [BlogController::class, 'update']);
-    Route::post('blog-delete', [BlogController::class, 'destroy']);
 
 });

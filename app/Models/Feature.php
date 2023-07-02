@@ -14,6 +14,8 @@ class Feature extends Model
         'name_ar',
         'icon',
         'package_id',
+        'content',
+        'content_ar',
     ];
     public function package()
     {

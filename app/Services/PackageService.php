@@ -55,7 +55,7 @@ class PackageService
 
         $vendor->features()->attach(
             $feature['feature_id'],
-            ['content' => $feature['content']]
+            ['content' => $feature['content']],
         );
        }
        return $vendor->with('features');

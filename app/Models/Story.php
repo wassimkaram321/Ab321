@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -25,7 +26,7 @@ class Story extends Model
     }
     public function users()
     {
-        return $this->belongsToMany(User::class, 'story_user');
+        return $this->belongsToMany(User::class, 'story_user', 'story_id','user_id');
     }
     protected static function booted()
     {
@@ -37,4 +38,5 @@ class Story extends Model
 
         });
     }
+   
 }
