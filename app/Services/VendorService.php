@@ -319,4 +319,8 @@ class VendorService
         (new PackageService())->addVendorFeatures($request);
         return $vendor;
     }
+    public function registration($request)
+    {
+        return $this->vendor->where('register',1)->get();
+    }
 }

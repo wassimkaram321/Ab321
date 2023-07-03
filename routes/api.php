@@ -125,7 +125,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('vendor_update', [VendorController::class, 'update']);
     Route::post('vendor_delete', [VendorController::class, 'destroy']);
     Route::post('vendor_status', [VendorController::class, 'changeStatus']);
-
+    Route::get('registration', [VendorController::class, 'registration']);
 
     Route::post('package_add', [PackageController::class, 'store']);
     Route::post('package_update', [PackageController::class, 'update']);
