@@ -130,6 +130,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('package_delete', [PackageController::class, 'destroy']);
     Route::post('add_vendor_package', [PackageController::class, 'addVendorPackage']);
     Route::post('add_vendor_features', [PackageController::class, 'addVendorFeatures']);
+    Route::post('package_status', [PackageController::class, 'changeStatus']);
 
     Route::post('feature_add', [FeatureController::class, 'store']);
     Route::post('feature_update', [FeatureController::class, 'update']);

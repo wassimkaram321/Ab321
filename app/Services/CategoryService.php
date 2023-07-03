@@ -18,7 +18,9 @@ class CategoryService
     {
         return $this->category->app()
             ->with([
-                'subCategories',
+                'subCategories' => function ($query) {
+                    $query->withCount('vendors');
+                },
                 'ads' => function ($query) {
                     $query->orderByRaw("FIELD(priority, 'high', 'medium', 'low')");
                 }
