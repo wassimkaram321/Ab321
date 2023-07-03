@@ -16,10 +16,10 @@ class CreateVendorsTable extends Migration
         Schema::create('vendors', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('name_ar');
+            $table->string('name_ar')->nullable();
             $table->text('description')->nullable();
             $table->text('description_ar')->nullable();
-            $table->string('image');
+            $table->string('image')->nullable();
             // $table->double('distance')->nullable();
             // $table->time('open')->nullable();
             // $table->time('close')->nullable();

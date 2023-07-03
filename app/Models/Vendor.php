@@ -15,6 +15,7 @@ class Vendor extends Model
 {
     use HasFactory, HasReviewRating;
     public $timestamps = true;
+    protected $hidden = ['register'];
     public $with = ['category'];
     protected $fillable = [
         'name',
@@ -41,6 +42,7 @@ class Vendor extends Model
         'visits',
         'custom_date',
         'website',
+        'register',
     ];
 
     public function banners()
@@ -156,7 +158,7 @@ class Vendor extends Model
             $newQuery = $newQuery->skip($skipCount)->take($maxCount);
         }
 
-        $newQuery = $newQuery->get();
+        $newQuery = $newQuery->where('register',0)->get();
 
 
         $currentDay = Carbon::now()->format('l');

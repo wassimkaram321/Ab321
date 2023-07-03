@@ -95,6 +95,8 @@ Route::get('nearby-vendors',   [UserController::class, 'getNearbyVendors']);
 
 Route::get('services', [ServicesController::class, 'index']);
 
+Route::post('vendor_register', [VendorController::class, 'register']);
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // Route::get('vendors', [VendorController::class, 'index']);
 
@@ -129,7 +131,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('package_update', [PackageController::class, 'update']);
     Route::post('package_delete', [PackageController::class, 'destroy']);
     Route::post('add_vendor_package', [PackageController::class, 'addVendorPackage']);
-    Route::post('add_vendor_features', [PackageController::class, 'addVendorFeatures']);
+    Route::post('add_vendor_features', [PackageController::class, 'add_vendor_features']);
     Route::post('package_status', [PackageController::class, 'changeStatus']);
 
     Route::post('feature_add', [FeatureController::class, 'store']);
