@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\{
     PackageController,
     PrivacyController,
     ReelController,
+    ServicesController,
     SocialMediaController,
     StoryController,
     StoryDetailsController,
@@ -92,6 +93,7 @@ Route::post('forget-password', [AuthController::class, 'resetOtpPassword']);
 
 Route::get('nearby-vendors',   [UserController::class, 'getNearbyVendors']);
 
+Route::get('services', [ServicesController::class, 'index']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // Route::get('vendors', [VendorController::class, 'index']);
@@ -168,6 +170,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('mainAd-delete', [MainAdController::class, 'destroy']);
     Route::post('mainAd-update-status',   [MainAdController::class, 'updateStatus']);
     Route::post('mainAd-click-increment', [MainAdController::class, 'clickIncrement']);
+
+    Route::post('services-update', [ServicesController::class, 'update']);
+
 
 
     Route::post('add-favorite-vendor',    [UserController::class, 'addVendorToFavorite']);
