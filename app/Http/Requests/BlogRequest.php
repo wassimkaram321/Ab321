@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class BlogRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,22 +24,16 @@ class LoginRequest extends FormRequest
        public function rules()
     {
         switch ($this->getFunctionName()) {
-            case 'login':
-                return $this->login();
+            case 'index':
+                return $this->index();
             case 'store':
                 return $this->store();
             case 'update':
-                return $this->store();
+                return $this->update();
             case 'show':
                 return $this->show();
             case 'destroy':
                 return $this->show();
-            case 'generateOTP':
-                return $this->generateOTP();
-            case 'resetPassword':
-                return $this->resetPassword();
-            case 'createDeviceToken':
-                return $this->token();
             default:
                 return [];
         }
@@ -51,51 +45,29 @@ class LoginRequest extends FormRequest
             'id' => 'required',
         ];
     }
-    public function login()
+    public function index()
     {
         # code...
         return [
-            'email' => 'sometimes|exists:users,email',
-            'phone' => 'sometimes|exists:users,phone',
-            'password' => 'required',
-        ];
-    }
-    public function generateOTP()
-    {
-        # code...
-        return [
-            'phone' => 'required',
-        ];
-    }
-    public function resetPassword()
-    {
-        # code...
-        return [
-            'phone' => 'unique:otps,phone|exists:users,phone',
-            'code' => 'required',
-            'password' => 'required',
-            'confirm_password' => 'required|same:password',
         ];
     }
     public function store()
     {
         # code...
         return [
-
+            'title'=>'required',
+            'content'=>'required',
+            'image'=>'required|image',
         ];
+
     }
     public function update()
     {
 
         return [
-
-        ];
-    }
-    public function token()
-    {
-
-        return [
-            'device_token'=>'required'
+            'id'=>'required',
+            'title'=>'required',
+            'content'=>'required',
         ];
     }
     public function getFunctionName(): string

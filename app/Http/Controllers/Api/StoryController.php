@@ -22,6 +22,11 @@ class StoryController extends Controller
         $data = $this->storyServices->all($storyRequest);
         return $this->success($data, 'success');
     }
+    public function all(StoryRequest $storyRequest)
+    {
+        $data = $this->storyServices->getAll($storyRequest);
+        return $this->success($data, 'success');
+    }
     public function show(StoryRequest $storyRequest)
     {
         $data = $this->storyServices->find($storyRequest);
@@ -45,6 +50,11 @@ class StoryController extends Controller
     public function seenStories(StoryRequest $storyRequest)
     {
         $this->storyServices->seenStories($storyRequest);
+        return $this->success([], 'success');
+    }
+    public function updateViews(StoryRequest $storyRequest)
+    {
+        $this->storyServices->updateViews($storyRequest);
         return $this->success([], 'success');
     }
 }

@@ -6,6 +6,7 @@ use App\Helpers\FileHelper;
 use App\Models\Reel;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ReelService
 {
@@ -76,8 +77,14 @@ class ReelService
         $ids = $request->ids;
         $user = User::where('id', Auth::guard('api')->id())->first();
         if (isset($user)) {
-            foreach ($ids as $id) {
-                $user->reels()->syncWithoutDetaching($id);
+            // foreach ($ids as $id) {
+            //     $user->reels()->syncWithoutDetaching($id);
+            // }
+            foreach($ids as $id){
+                DB::table('reel_user')->insert([
+                    'story_id'=>$id,
+                    'user_id'=>$user->id,
+                ]);
             }
         }
     }

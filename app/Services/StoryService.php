@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Models\Story;
 use App\Models\User;
 use App\Models\Vendor;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class StoryService
 {
@@ -17,19 +19,45 @@ class StoryService
 
     public function all($request)
     {
-        $vendor = Vendor::findOrFail($request->vendor_id);
-        return $vendor
-        ->with([
-            'stories' => function ($query) {
-                $query->with('storyDetails');
+        $vendors = Vendor::
+            with([
+                'stories' => function ($query) {
+                    $query->with('storyDetails');
+                }
+            ])
+            ->get(['id', 'name', 'name_ar']);
+            if (auth()->check()) {
+                $user = User::where('id', auth()->user()->id)->first();
+            } else {
+                $user = User::where('id', Auth::guard('api')->id())->first();
             }
-        ])
-        ->get();
+        foreach ($vendors as $vendor) {
+            foreach ($vendor->stories as $story) {
+                $story->seen = 0;
+                if (isset($user)) {
+                    $fav = $user->stories()->where('story_id', $story->id)->first();
+                    if (isset($fav)) {
+                        $story->seen = 1;
+                    }
+                }
+            }
+        }
+        return $vendors;
     }
     public function getAll($request)
     {
-       return $this->story->with('vendor')->get();
+        if ($request->has('id')) {
+            $story = $this->story->findOrFail($request->id);
+            return $story->storyDetails;
+        }
+        return $this->story->with(['storyDetails', 'vendor:id,name,name_ar'])->withCount('storyDetails')->get();
     }
+    public function getAllApi($request)
+    {
+
+        return $this->story->get();
+    }
+
 
     public function find($request)
     {
@@ -42,13 +70,12 @@ class StoryService
         $vendor = Vendor::findOrFail($request->vendor_id);
         $story = $this->story->wherevendor_id($vendor->id)->first();
 
-        if($story == null)
-        {
+        if ($story == null) {
             $story = $this->story->create([
-                'vendor_id'=>$request->vendor_id
+                'vendor_id' => $request->vendor_id
             ]);
         }
-        $request->merge(['story_id'=>$story->id]);
+        $request->merge(['story_id' => $story->id]);
         (new StoryDetailsService())->create($request);
         return $story->with('storyDetails');
     }
@@ -57,9 +84,9 @@ class StoryService
     {
         $story = $this->story->wherevendor_id($request->vendor_id)->first();
         $story->update([
-            'views'=>$request->views,
+            'views' => $request->views,
         ]);
-        $request->merge(['story_id'=>$story->id]);
+        $request->merge(['story_id' => $story->id]);
         (new StoryDetailsService())->update($request);
         return $story->with('storyDetails');
     }
@@ -73,8 +100,17 @@ class StoryService
         $ids = $request->ids;
         $userId = auth()->user()->id;
         $user = User::findOrFail($userId);
-        foreach($ids as $id){
-            $user->stories()->syncWithoutDetaching($id);
+        foreach ($ids as $id) {
+            DB::table('story_user')->updateOrInsert([
+                'story_id' => $id,
+                'user_id' => $userId,
+            ]);
         }
+    }
+    public function updateViews($request)
+    {
+        return $this->story->findOrFail($request->id)->update([
+            'views' => $request->views,
+        ]);
     }
 }

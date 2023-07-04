@@ -52,4 +52,10 @@ class PackageController extends Controller
         $data = $this->packageServices->addVendorFeatures($packageRequest);
         return $this->success($data, 'success');
     }
+    public function changeStatus(PackageRequest $packageRequest)
+    {
+        $data = $this->packageServices->changeStatus($packageRequest);
+        return $this->success($data, 'success');
+    }
+
 }

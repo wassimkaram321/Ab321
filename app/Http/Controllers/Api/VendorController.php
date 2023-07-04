@@ -120,4 +120,16 @@ class VendorController extends Controller
         $data = $this->vendorServices->search($request);
         return $this->success($data, 'success');
     }
+    public function register(VendorRequest $request)
+    {
+        //
+        $data = $this->vendorServices->register($request);
+        return $this->success($data, 'success');
+    }
+    public function registration(VendorRequest $request)
+    {
+        //
+        $data = $this->vendorServices->registration($request);
+        return $this->success($data, 'success');
+    }
 }

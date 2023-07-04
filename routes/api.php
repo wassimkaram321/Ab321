@@ -15,8 +15,10 @@ use App\Http\Controllers\Api\{
     PackageController,
     PrivacyController,
     ReelController,
+    ServicesController,
     SocialMediaController,
     StoryController,
+    StoryDetailsController,
     SubCategoryController,
     UserController,
     VendorController,
@@ -62,6 +64,8 @@ Route::get('features', [FeatureController::class, 'index']);
 Route::get('feature',  [FeatureController::class, 'show']);
 
 Route::get('stories', [StoryController::class, 'index']);
+Route::get('all_stories', [StoryController::class, 'all']);
+Route::get('story_view_edit', [StoryController::class, 'updateViews']);
 Route::get('story',   [StoryController::class, 'show']);
 
 Route::get('vendor-reviews', [ReviewController::class, 'RealestateReviews']);
@@ -87,7 +91,16 @@ Route::post('logout', [AuthController::class, 'logout']);
 Route::post('forget-password-generate-otp', [AuthController::class, 'forgetPassword']);
 Route::post('forget-password', [AuthController::class, 'resetOtpPassword']);
 
+Route::get('nearby-vendors',   [UserController::class, 'getNearbyVendors']);
+
+Route::get('services', [ServicesController::class, 'index']);
+
+Route::post('vendor_register', [VendorController::class, 'register']);
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    // Route::get('vendors', [VendorController::class, 'index']);
+
+
 
     Route::post('reset-password', [AuthController::class, 'resetPassword']);
 
@@ -112,14 +125,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('vendor_update', [VendorController::class, 'update']);
     Route::post('vendor_delete', [VendorController::class, 'destroy']);
     Route::post('vendor_status', [VendorController::class, 'changeStatus']);
-    Route::post('nearby-vendors',   [UserController::class, 'getNearbyVendors']);
-
+    Route::get('registration', [VendorController::class, 'registration']);
 
     Route::post('package_add', [PackageController::class, 'store']);
     Route::post('package_update', [PackageController::class, 'update']);
     Route::post('package_delete', [PackageController::class, 'destroy']);
     Route::post('add_vendor_package', [PackageController::class, 'addVendorPackage']);
-    Route::post('add_vendor_features', [PackageController::class, 'addVendorFeatures']);
+    Route::post('add_vendor_features', [PackageController::class, 'add_vendor_features']);
+    Route::post('package_status', [PackageController::class, 'changeStatus']);
 
     Route::post('feature_add', [FeatureController::class, 'store']);
     Route::post('feature_update', [FeatureController::class, 'update']);
@@ -129,7 +142,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('story_add',   [StoryController::class, 'store']);
     Route::post('story_update', [StoryController::class, 'update']);
     Route::post('story_delete', [StoryController::class, 'destroy']);
-    Route::post('seen_stories', [StoryController::class, 'seenStories']);
+    Route::post('story_details_delete', [StoryDetailsController::class, 'destroy']);
+    Route::post('seen-stories', [StoryController::class, 'seenStories']);
 
     Route::post('make-review',   [ReviewController::class, 'makeRealestateReview']);
     Route::post('delete-review', [ReviewController::class, 'deleteRealestateReview']);
@@ -160,6 +174,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('mainAd-update-status',   [MainAdController::class, 'updateStatus']);
     Route::post('mainAd-click-increment', [MainAdController::class, 'clickIncrement']);
 
+    Route::post('services-update', [ServicesController::class, 'update']);
+
+
 
     Route::post('add-favorite-vendor',    [UserController::class, 'addVendorToFavorite']);
     Route::post('remove-favorite-vendor', [UserController::class, 'removeVendorToFavorite']);
@@ -171,7 +188,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('privacy-update', [PrivacyController::class,'update']);
 
-    Route::post('nearby-vendors', [UserController::class, 'getNearbyVendors']);
 
     Route::get('notifications',             [NotificationController::class, 'index']);
     Route::post('notification-send',        [NotificationController::class, 'store']);

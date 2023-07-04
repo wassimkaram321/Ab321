@@ -8,6 +8,7 @@ use App\Models\Day;
 use App\Models\SubCategory;
 use App\Models\Vendor;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class VendorService
 {
@@ -20,6 +21,7 @@ class VendorService
 
     public function all($request = null)
     {
+
 
         $query = $this->vendor->withCount('favoriteUsers');
 
@@ -69,7 +71,8 @@ class VendorService
     {
         $subCategories = $request->subcategories ?? [];
         $vendor = $this->vendor->create($request->all());
-        $vendor->subcategories()->attach($subCategories);
+        if($subCategories != [])
+            $vendor->subcategories()->attach($subCategories);
         if (isset($request->days)) {
             foreach ($request->days as $day) {
                 $vendor->days()->attach([$day['day_id'] => ['open_at' => $day['open_at'], 'close_at' => $day['close_at']]]);
@@ -82,7 +85,7 @@ class VendorService
         }
 
         if ($request->has('image')) {
-            $file_name = FileHelper::addFile($request->image);
+            $file_name = FileHelper::addFile($request->image,'images/vendors');
             $vendor->image = $file_name;
             $vendor->save();
         }
@@ -160,9 +163,15 @@ class VendorService
     }
     public function changeStatus($request)
     {
-        $this->vendor->findOrFail($request->id)->update([
+        $vendor = $this->vendor->findOrFail($request->id);
+        $vendor->update([
             'is_active' => $request->is_active,
         ]);
+        if($vendor->register == 1){
+            $vendor->update([
+                'register' => 0,
+            ]);
+        }
     }
     public function addImage($vendor, $image)
     {
@@ -261,20 +270,20 @@ class VendorService
                     $query->whereIn('sub_categories.id', $subcategories);
                 });
             }
-            if ($request->has('category_id')) {
+            if ($request->category_id != null) {
                 $query->where('category_id', $request->category_id);
             }
 
-            if ($request->has('features')) {
+            if ($request->features !=null) {
                 $features = $request->features;
                 $query->whereHas('features', function ($query) use ($features) {
                     $query->whereIn('features.id', $features);
                 });
             }
-            if ($request->has('rate')) {
+            if ($request->rate!=null) {
                 $query->where('avg_rating', $request->rate);
             }
-            if ($request->has('latitude') && $request->has('longitude')) {
+            if ($request->latitude!=null && $request->longitude!=null) {
                 $latitude = $request->latitude;
                 $longitude = $request->longitude;
                 $radius = 5;
@@ -301,5 +310,17 @@ class VendorService
             ->get();
 
         return $vendors;
+    }
+    public function register($request)
+    {
+        $request->merge(['register'=>1]);
+        $vendor = $this->vendor->create($request->all());
+        $request->merge(['vendor_id'=>$vendor->id]);
+        (new PackageService())->addVendorFeatures($request);
+        return $vendor;
+    }
+    public function registration($request)
+    {
+        return $this->vendor->where('register',1)->get();
     }
 }

@@ -67,7 +67,11 @@ class UserService
     }
     public function getNearbyVendors($request)
     {
-        $user = $this->user->findOrFail(Auth::id());
+       if (auth()->check()) {
+            $user = User::where('id', auth()->user()->id)->first();
+        } else {
+            $user = User::where('id', Auth::guard('api')->id())->first();
+        }
         $vendors = Vendor::with('category')->where('is_active', 1)->app();
         $nearby = collect();
         foreach ($vendors as $vendor) {

@@ -52,12 +52,25 @@ class PackageService
        $vendor = Vendor::findOrFail($request->vendor_id);
        $features = $request->features;
        foreach($features as $feature){
-        $feature_icon = FileHelper::addFile($feature['icon'],'images/features');
+
         $vendor->features()->attach(
             $feature['feature_id'],
-            ['content' => $feature['content'],'icon'=>$feature_icon]
+            ['content' => $feature['content']],
         );
        }
        return $vendor->with('features');
+    }
+    public function changeStatus($request)
+    {
+        $packages = $this->package->where('is_active',1)->get();
+        if(count($packages) >=5 && $request->is_active == 1)
+        {
+            throw new \Exception('Cannot Update Status');
+        }
+        $package = $this->package->findOrFail($request->id);
+        $package->update([
+            'is_active' => $request->is_active,
+        ]);
+        return $package;
     }
 }

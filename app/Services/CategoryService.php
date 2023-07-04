@@ -18,11 +18,14 @@ class CategoryService
     {
         return $this->category->app()
             ->with([
-                'subCategories',
+                'subCategories' => function ($query) {
+                    $query->withCount('vendors');
+                },
                 'ads' => function ($query) {
                     $query->orderByRaw("FIELD(priority, 'high', 'medium', 'low')");
                 }
             ])
+            ->withCount('vendors')
             ->orderBy('featured', 'desc')
             ->get();
     }
@@ -30,6 +33,7 @@ class CategoryService
     {
         return $this->category->app()
             ->orderBy('featured', 'desc')
+            ->withCount('vendors')
             ->get();
     }
 
@@ -41,7 +45,9 @@ class CategoryService
                 'ads' => function ($query) {
                     $query->orderByRaw("FIELD(priority, 'high', 'medium', 'low')");
                 }
-            ])->findOrFail($request->id);
+            ])
+            ->withCount('vendors')
+            ->findOrFail($request->id);
     }
 
     public function create($request)
